@@ -5,11 +5,9 @@ class LandingScreen extends StatelessWidget {
   const LandingScreen({
     Key? key,
     required this.nextPage,
-    required this.previousPage,
   }) : super(key: key);
 
   final VoidCallback nextPage;
-  final VoidCallback previousPage;
 
   @override
   Widget build(BuildContext context) {
