@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/theme/palette.dart';
 
 class CustomTheme {
@@ -38,6 +39,9 @@ class CustomTheme {
           ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kSmallSpacing / 2),
+          ),
           backgroundColor: Palette.red500,
         ),
       ),
