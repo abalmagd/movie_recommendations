@@ -25,5 +25,5 @@ class Genre extends Equatable {
   String toString() => 'Genre(id: $id, name: $name, isSelected: $isSelected)';
 
   @override
-  List<Object?> get props => [name, id, isSelected];
+  List<Object?> get props => [id, name, isSelected];
 }

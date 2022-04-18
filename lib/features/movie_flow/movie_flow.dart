@@ -39,7 +39,7 @@ class _MovieFlowState extends State<MovieFlow> {
       controller: pageController,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        LandingScreen(nextPage: nextPage, previousPage: previousPage),
+        LandingScreen(nextPage: nextPage),
         GenreScreen(nextPage: nextPage, previousPage: previousPage),
       ],
     );
