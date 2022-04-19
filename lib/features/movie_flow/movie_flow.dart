@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre_screen.dart';
 import 'package:movie_recommendations/features/movie_flow/landing/landing_screen.dart';
+import 'package:movie_recommendations/features/movie_flow/rating/rating_screen.dart';
 
 class MovieFlow extends StatefulWidget {
   const MovieFlow({Key? key}) : super(key: key);
@@ -41,6 +42,7 @@ class _MovieFlowState extends State<MovieFlow> {
       children: [
         LandingScreen(nextPage: nextPage),
         GenreScreen(nextPage: nextPage, previousPage: previousPage),
+        RatingScreen(nextPage: nextPage, previousPage: previousPage),
       ],
     );
   }

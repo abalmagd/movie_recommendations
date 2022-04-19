@@ -51,10 +51,9 @@ class _GenreScreenState extends State<GenreScreen> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            'Choose a genre!',
+             'Choose a genre!',
             style: theme.textTheme.headline5,
             textAlign: TextAlign.center,
           ),
@@ -77,6 +76,7 @@ class _GenreScreenState extends State<GenreScreen> {
             onPressed: widget.nextPage,
             text: 'Continue',
           ),
+          const SizedBox(height: kMediumSpacing),
         ],
       ),
     );

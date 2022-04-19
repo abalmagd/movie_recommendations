@@ -35,17 +35,24 @@ class CustomTheme {
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           )
           .apply(
-            displayColor: Colors.white,
+              displayColor: Colors.white,
+            ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kSmallSpacing / 2),
+            ),
+            backgroundColor: Palette.red500,
           ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(kSmallSpacing / 2),
-          ),
-          backgroundColor: Palette.red500,
         ),
-      ),
-    );
+        sliderTheme: SliderThemeData(
+          activeTrackColor: Colors.white,
+          inactiveTrackColor: Colors.grey.shade800,
+          thumbColor: Colors.white,
+          valueIndicatorColor: Palette.red500,
+          inactiveTickMarkColor: Colors.transparent,
+          activeTickMarkColor: Colors.transparent,
+        ));
   }
 
   static ThemeData lightTheme(BuildContext context) {
