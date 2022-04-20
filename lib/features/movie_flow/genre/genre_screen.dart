@@ -31,7 +31,7 @@ class _GenreScreenState extends State<GenreScreen> {
     Genre(name: 'Romance'),
   ];
 
-  void toggleSelected(Genre genre) {
+  void toggleSelected({required Genre genre}) {
     List<Genre> updatedGenres = [
       for (final oldGenre in genres)
         if (oldGenre == genre) oldGenre.toggleSelected() else oldGenre
@@ -64,7 +64,7 @@ class _GenreScreenState extends State<GenreScreen> {
                 final genre = genres[index];
                 return ListCard(
                   genre: genre,
-                  onTap: () => toggleSelected(genre),
+                  onTap: () => toggleSelected(genre: genre),
                 );
               },
               separatorBuilder: (context, index) =>
