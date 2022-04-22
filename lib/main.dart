@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:movie_recommendations/features/movie_flow/result/result_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_recommendations/features/movie_flow/movie_flow.dart';
 import 'package:movie_recommendations/theme/custom_theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: CustomTheme.lightTheme(context),
       themeMode: ThemeMode.dark,
       darkTheme: CustomTheme.darkTheme(context),
-      home: const ResultScreen(),
+      home: const MovieFlow(),
     );
   }
 }

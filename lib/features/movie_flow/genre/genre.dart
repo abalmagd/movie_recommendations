@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_recommendations/features/movie_flow/genre/genre_entity.dart';
 
 @immutable
 class Genre extends Equatable {
@@ -8,6 +9,14 @@ class Genre extends Equatable {
     this.id = 0,
     this.isSelected = false,
   });
+
+  factory Genre.fromEntity(GenreEntity entity) {
+    return Genre(
+      name: entity.name,
+      id: entity.id,
+      isSelected: false,
+    );
+  }
 
   final int id;
   final String name;

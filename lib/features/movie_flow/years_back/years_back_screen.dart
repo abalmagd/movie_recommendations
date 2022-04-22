@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/result_screen.dart';
 
-class YearsBackScreen extends StatefulWidget {
-  const YearsBackScreen({
-    Key? key,
-    required this.previousPage,
-  }) : super(key: key);
-
-  final VoidCallback previousPage;
+class YearsBackScreen extends ConsumerWidget {
+  const YearsBackScreen({Key? key}) : super(key: key);
 
   @override
-  State<YearsBackScreen> createState() => _YearsBackScreenState();
-}
-
-class _YearsBackScreenState extends State<YearsBackScreen> {
-  double yearsBack = 10;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final call = ref.read(movieFlowControllerProvider.notifier);
+    final watch = ref.watch(movieFlowControllerProvider);
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: widget.previousPage,
+          onPressed: call.previousPage,
         ),
       ),
       body: Column(
@@ -39,7 +31,7 @@ class _YearsBackScreenState extends State<YearsBackScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${yearsBack.ceil()}',
+                '${watch.yearsBack}',
                 style: theme.textTheme.headline2,
               ),
               Text(
@@ -52,16 +44,13 @@ class _YearsBackScreenState extends State<YearsBackScreen> {
           ),
           const Spacer(),
           Slider(
-            label: '${yearsBack.ceil()}',
-            value: yearsBack,
+            label: '${watch.yearsBack}',
+            value: watch.yearsBack.toDouble(),
             divisions: 30,
             min: 0,
             max: 30,
-            onChanged: (value) {
-              setState(() {
-                yearsBack = value;
-              });
-            },
+            onChanged: (updatedYearsBack) =>
+                call.updateYearsBack(updatedYearsBack.toInt()),
           ),
           const Spacer(),
           Button(

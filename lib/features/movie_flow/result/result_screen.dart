@@ -1,43 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
-import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
+import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends ConsumerWidget {
   const ResultScreen({Key? key}) : super(key: key);
 
-  static route({bool fullScreenDialog = false}) => MaterialPageRoute(
+  static route({bool fullScreenDialog = true}) => MaterialPageRoute(
         builder: (context) => const ResultScreen(),
         fullscreenDialog: fullScreenDialog,
       );
 
   final double movieHeight = 150;
 
-  final Movie movie = const Movie(
-    title: 'The Hulk',
-    overview:
-        'Scientist Bruce Banner (Edward Norton) desperately seeks a cure for '
-        'the gamma radiation that contaminated his cells and turned him '
-        'into The Hulk. Cut off from his true love Betty Ross (Liv Tyler) '
-        'and forced to hide from his nemesis, Gen. Thunderbolt Ross '
-        '(William Hurt), Banner soon comes face-to-face with a new threat: '
-        'a supremely powerful enemy known as The Abomination (Tim Roth).',
-    voteAverage: 5,
-    genres: [
-      Genre(name: 'Action'),
-      Genre(name: 'Thrill'),
-      Genre(name: 'Fantasy'),
-    ],
-    releaseDate: '2020-4-22',
-    backDropPath: '',
-    posterPath: '',
-  );
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final read = ref.read(movieFlowControllerProvider);
+    final call = ref.read(movieFlowControllerProvider.notifier);
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
@@ -57,7 +39,7 @@ class ResultScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       bottom: -(movieHeight / 2),
                       child: _MovieImageDetails(
-                        movie: movie,
+                        movie: read.movie,
                         movieHeight: movieHeight,
                       ),
                     ),
@@ -67,7 +49,7 @@ class ResultScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(kMediumSpacing),
                   child: Text(
-                    movie.overview,
+                    read.movie.overview,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -75,7 +57,10 @@ class ResultScreen extends StatelessWidget {
             ),
           ),
           Button(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              call.goToGenres();
+              Navigator.pop(context);
+            },
             text: 'Find another movie',
           ),
           const SizedBox(height: kMediumSpacing),
@@ -104,7 +89,11 @@ class _CoverImage extends StatelessWidget {
             ],
           ).createShader(Rect.fromLTRB(0, 0, bounds.width, bounds.height));
         },
-        child: const Placeholder(),
+        child: const Image(
+          image: NetworkImage(
+              'https://www.pluggedin.com/wp-content/uploads/2019/12/the-hulk-'
+              '1024x640.jpg'),
+        ),
       ),
     );
   }
@@ -130,7 +119,11 @@ class _MovieImageDetails extends StatelessWidget {
           SizedBox(
             width: 100,
             height: movieHeight,
-            child: const Placeholder(),
+            child: const Image(
+              image: NetworkImage(
+                  'https://i.pinimg.com/originals/93/e3/17/93e317857baf22a04c'
+                  '4752a9e8e050cd.jpg'),
+            ),
           ),
           const SizedBox(width: kMediumSpacing),
           Expanded(
@@ -139,19 +132,19 @@ class _MovieImageDetails extends StatelessWidget {
               children: [
                 Text(
                   movie.title,
-                  style: theme.primaryTextTheme.headline6,
+                  style: theme.textTheme.headline6,
                 ),
                 Text(
                   movie.genresCommaSeparated,
-                  style: theme.primaryTextTheme.bodyText2,
+                  style: theme.textTheme.bodyText2,
                 ),
                 Row(
                   children: [
                     Text(
                       '${movie.voteAverage}',
-                      style: theme.primaryTextTheme.bodyText2?.copyWith(
-                        color: theme.primaryTextTheme.bodyText2?.color
-                            ?.withOpacity(0.65),
+                      style: theme.textTheme.bodyText2?.copyWith(
+                        color:
+                            theme.textTheme.bodyText2?.color?.withOpacity(0.65),
                       ),
                     ),
                     const Icon(

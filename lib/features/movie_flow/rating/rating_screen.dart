@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 
-class RatingScreen extends StatefulWidget {
-  const RatingScreen({
-    Key? key,
-    required this.nextPage,
-    required this.previousPage,
-  }) : super(key: key);
-
-  final VoidCallback nextPage;
-  final VoidCallback previousPage;
+class RatingScreen extends ConsumerWidget {
+  const RatingScreen({Key? key}) : super(key: key);
 
   @override
-  State<RatingScreen> createState() => _RatingScreenState();
-}
-
-class _RatingScreenState extends State<RatingScreen> {
-  double rating = 5;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final call = ref.read(movieFlowControllerProvider.notifier);
+    final watch = ref.watch(movieFlowControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: widget.previousPage,
+          onPressed: call.previousPage,
         ),
       ),
       body: Column(
@@ -40,7 +31,7 @@ class _RatingScreenState extends State<RatingScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${rating.ceil()}',
+                '${watch.rating}',
                 style: theme.textTheme.headline2,
               ),
               const Icon(
@@ -52,20 +43,17 @@ class _RatingScreenState extends State<RatingScreen> {
           ),
           const Spacer(),
           Slider(
-            label: '${rating.ceil()}',
-            value: rating,
+            label: '${watch.rating}',
+            value: watch.rating.toDouble(),
             divisions: 9,
             min: 1,
             max: 10,
-            onChanged: (value) {
-              setState(() {
-                rating = value;
-              });
-            },
+            onChanged: (updatedRating) =>
+                call.updateRating(updatedRating.toInt()),
           ),
           const Spacer(),
           Button(
-            onPressed: widget.nextPage,
+            onPressed: call.nextPage,
             text: 'Continue',
           ),
           const SizedBox(height: kMediumSpacing),
