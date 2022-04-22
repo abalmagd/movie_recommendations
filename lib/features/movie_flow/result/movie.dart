@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
+import 'package:movie_recommendations/features/movie_flow/result/movie_entity.dart';
 
 @immutable
 class Movie extends Equatable {
@@ -22,6 +23,21 @@ class Movie extends Equatable {
         releaseDate = '',
         backDropPath = '',
         posterPath = '';
+
+  factory Movie.fromEntity(MovieEntity entity, List<Genre> genres) {
+    return Movie(
+      title: entity.title,
+      overview: entity.overview,
+      voteAverage: entity.voteAverage,
+      genres: genres
+          .where((genre) => entity.genreIds.contains(genre.id))
+          .toList(growable: false),
+      releaseDate: entity.releaseDate,
+      posterPath: 'https://image.tmdb.org/t/p/original/${entity.posterPath}',
+      backDropPath:
+          'https://image.tmdb.org/t/p/original/${entity.backDropPath}',
+    );
+  }
 
   final String title;
   final String overview;
