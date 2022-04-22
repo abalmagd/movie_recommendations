@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_recommendations/features/movie_flow/movie_flow.dart';
+import 'package:movie_recommendations/features/movie_flow/result/result_screen.dart';
 import 'package:movie_recommendations/theme/custom_theme.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: CustomTheme.lightTheme(context),
       themeMode: ThemeMode.dark,
       darkTheme: CustomTheme.darkTheme(context),
-      home: const MovieFlow(),
+      home: const ResultScreen(),
     );
   }
 }
