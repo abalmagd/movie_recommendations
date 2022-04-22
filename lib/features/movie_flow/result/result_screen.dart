@@ -41,8 +41,8 @@ class ResultScreen extends StatelessWidget {
                 Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.bottomLeft,
-                  children: [
-                    const _CoverImage(),
+                  children: const [
+                    _CoverImage(),
                   ],
                 ),
               ],
@@ -60,12 +60,18 @@ class _CoverImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 298),
+      constraints: const BoxConstraints(minHeight: 300),
       child: ShaderMask(
+        blendMode: BlendMode.dstIn,
         shaderCallback: (Rect bounds) {
-          return const LinearGradient(
-            colors: [],
-          ).createShader(bounds);
+          return LinearGradient(
+            begin: Alignment.center,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).scaffoldBackgroundColor,
+              Colors.transparent,
+            ],
+          ).createShader(Rect.fromLTRB(0, 0, bounds.width, bounds.height));
         },
         child: const Placeholder(),
       ),
