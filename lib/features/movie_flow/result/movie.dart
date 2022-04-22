@@ -57,5 +57,13 @@ class Movie extends Equatable {
       'backDropPath: $backDropPath, posterPath: $posterPath)';
 
   @override
-  List<Object?> get props => [title, overview];
+  List<Object?> get props => [
+        title,
+        overview,
+        voteAverage,
+        genres,
+        releaseDate,
+        posterPath,
+        backDropPath,
+      ];
 }

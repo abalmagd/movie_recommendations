@@ -49,9 +49,10 @@ class MovieEntity extends Equatable {
         overview,
         genreIds,
         voteAverage,
-        totalResults,
-        totalPages,
         posterPath,
         backDropPath,
+        // Todo: Implement pagination after core app is finished
+        // totalResults,
+        // totalPages,
       ];
 }
