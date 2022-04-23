@@ -85,6 +85,7 @@ class CustomTheme {
         iconTheme: IconThemeData(color: Colors.black),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
         ),
       ),
       textTheme: theme.primaryTextTheme.copyWith(

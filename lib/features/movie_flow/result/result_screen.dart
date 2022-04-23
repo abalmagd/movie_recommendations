@@ -19,52 +19,51 @@ class ResultScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final read = ref.read(movieFlowControllerProvider);
     final call = ref.read(movieFlowControllerProvider.notifier);
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.bottomLeft,
-                  children: [
-                    const _CoverImage(),
-                    Positioned(
-                      width: MediaQuery.of(context).size.width,
-                      bottom: -(movieHeight / 2),
-                      child: _MovieImageDetails(
-                        movie: read.movie,
-                        movieHeight: movieHeight,
+    return WillPopScope(
+      onWillPop: call.willPopCallback,
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.bottomLeft,
+                    children: [
+                      const _CoverImage(),
+                      Positioned(
+                        width: MediaQuery.of(context).size.width,
+                        bottom: -(movieHeight / 2),
+                        child: _MovieImageDetails(
+                          movie: read.movie,
+                          movieHeight: movieHeight,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: movieHeight / 2),
-                Padding(
-                  padding: const EdgeInsets.all(kMediumSpacing),
-                  child: Text(
-                    read.movie.overview,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    ],
                   ),
-                ),
-              ],
+                  SizedBox(height: movieHeight / 2),
+                  Padding(
+                    padding: const EdgeInsets.all(kMediumSpacing),
+                    child: Text(
+                      read.movie.overview,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Button(
-            onPressed: () {
-              call.goToGenres();
-              Navigator.pop(context);
-            },
-            text: 'Find another movie',
-          ),
-          const SizedBox(height: kMediumSpacing),
-        ],
+            Button(
+              onPressed: () {
+                call.goToGenres();
+                Navigator.pop(context);
+              },
+              text: 'Find another movie',
+            ),
+            const SizedBox(height: kMediumSpacing),
+          ],
+        ),
       ),
     );
   }
@@ -75,8 +74,10 @@ class _CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 300),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: 231,
+      ),
       child: ShaderMask(
         blendMode: BlendMode.dstIn,
         shaderCallback: (Rect bounds) {
@@ -91,8 +92,7 @@ class _CoverImage extends StatelessWidget {
         },
         child: const Image(
           image: NetworkImage(
-              'https://www.pluggedin.com/wp-content/uploads/2019/12/the-hulk-'
-              '1024x640.jpg'),
+              'https://image.tmdb.org/t/p/original/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg'),
         ),
       ),
     );
@@ -121,8 +121,7 @@ class _MovieImageDetails extends StatelessWidget {
             height: movieHeight,
             child: const Image(
               image: NetworkImage(
-                  'https://i.pinimg.com/originals/93/e3/17/93e317857baf22a04c'
-                  '4752a9e8e050cd.jpg'),
+                  'https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg'),
             ),
           ),
           const SizedBox(width: kMediumSpacing),

@@ -32,6 +32,11 @@ class ListCard extends StatelessWidget {
             child: Text(
               genre.name,
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    color: genre.isSelected
+                        ? Colors.white
+                        : Theme.of(context).textTheme.bodyText2?.color,
+                  ),
             ),
           ),
         ),

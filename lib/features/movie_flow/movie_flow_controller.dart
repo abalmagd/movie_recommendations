@@ -66,4 +66,11 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
   void goToGenres() {
     state.pageController.jumpToPage(1);
   }
+
+  Future<bool> willPopCallback() async {
+    goToGenres();
+    // await showDialog or Show add banners or whatever
+    // then
+    return true; // return true if the route to be popped
+  }
 }

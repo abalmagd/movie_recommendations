@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Movie Recommendations',
       debugShowCheckedModeBanner: false,
       theme: CustomTheme.lightTheme(context),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       darkTheme: CustomTheme.darkTheme(context),
       home: const MovieFlow(),
     );
