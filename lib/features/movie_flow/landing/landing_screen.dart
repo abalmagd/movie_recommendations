@@ -21,11 +21,11 @@ class LandingScreen extends ConsumerWidget {
             style: theme.textTheme.headline5,
             textAlign: TextAlign.center,
           ),
-          const Spacer(),
-          const Image(
-            image: AssetImage('images/undraw_netflix_q00o.png'),
+          const Expanded(
+            child: Image(
+              image: AssetImage('images/undraw_netflix_q00o.png'),
+            ),
           ),
-          const Spacer(),
           Button(
             onPressed: ref.read(movieFlowControllerProvider.notifier).nextPage,
             text: 'Get Started',
