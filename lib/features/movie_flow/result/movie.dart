@@ -29,9 +29,7 @@ class Movie extends Equatable {
       title: entity.title,
       overview: entity.overview,
       voteAverage: entity.voteAverage,
-      genres: genres
-          .where((genre) => entity.genreIds.contains(genre.id))
-          .toList(growable: false),
+      genres: genres,
       releaseDate: entity.releaseDate,
       posterPath: 'https://image.tmdb.org/t/p/original/${entity.posterPath}',
       backDropPath:

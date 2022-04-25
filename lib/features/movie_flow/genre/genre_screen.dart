@@ -11,7 +11,6 @@ class GenreScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final read = ref.read(movieFlowControllerProvider);
     final watch = ref.watch(movieFlowControllerProvider);
     final call = ref.read(movieFlowControllerProvider.notifier);
     return Scaffold(
@@ -28,18 +27,28 @@ class GenreScreen extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: kMediumSpacing),
-              itemBuilder: (context, index) {
-                final genre = watch.genres[index];
-                return ListCard(
-                  genre: genre,
-                  onTap: () => call.toggleSelected(genre),
+            child: watch.genres.when(
+              data: (genres) {
+                return ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: kMediumSpacing),
+                  itemBuilder: (context, index) {
+                    final genre = genres[index];
+                    return ListCard(
+                      genre: genre,
+                      onTap: () => call.toggleSelected(genre),
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: kMediumSpacing),
+                  itemCount: genres.length,
                 );
               },
-              separatorBuilder: (context, index) =>
-                  const SizedBox(height: kMediumSpacing),
-              itemCount: read.genres.length,
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, s) {
+                return Center(
+                  child: Text('Error => $e'),
+                );
+              },
             ),
           ),
           Button(
@@ -60,7 +69,6 @@ class GenreScreen extends ConsumerWidget {
             },
             text: 'Continue',
           ),
-          const SizedBox(height: kMediumSpacing),
         ],
       ),
     );

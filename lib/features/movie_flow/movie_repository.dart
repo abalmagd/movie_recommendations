@@ -11,7 +11,7 @@ abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
 
   Future<List<MovieEntity>> getRecommendedMovies(
-    int rating,
+    double rating,
     String date,
     String genreIds,
   );
@@ -28,15 +28,21 @@ class TMDBMovieRepository implements MovieRepository {
 
   @override
   Future<List<GenreEntity>> getMovieGenres() async {
-    final response = await dio.get(genresEndpoint,
-        queryParameters: {'api_key': apiKey, 'language': 'en-US'});
-
-    debugPrint('Request to get genres => '
-        'Status: ${response.statusCode} '
-        'Message: ${response.statusMessage} '
-        'Genres: ${response.data['genres']}');
+    final response = await dio.get(
+      genresEndpoint,
+      queryParameters: {
+        'api_key': apiKey,
+        'language': 'en-US',
+      },
+    );
 
     final results = List<Map<String, dynamic>>.from(response.data['genres']);
+
+    debugPrint('Request to get genres => '
+        'Status: ${response.statusCode}, '
+        'Message: ${response.statusMessage}, '
+        'Genres: ${results.toString()}');
+
     final genres = results.map((e) => GenreEntity.fromMap(e)).toList();
 
     return genres;
@@ -44,26 +50,30 @@ class TMDBMovieRepository implements MovieRepository {
 
   @override
   Future<List<MovieEntity>> getRecommendedMovies(
-    int rating,
+    double rating,
     String date,
     String genreIds,
   ) async {
-    final response = await dio.get('discover/movie', queryParameters: {
-      'api_key': apiKey,
-      'language': 'en-US',
-      'sort_by': 'popularity.desc',
-      'include_adult': false,
-      'release_date.gte': date,
-      'vote_count.gte': rating,
-      'with_genres': genreIds,
-    });
-
-    debugPrint('Request to get genres => '
-        'Status: ${response.statusCode} '
-        'Message: ${response.statusMessage} '
-        'Genres: ${response.data['genres']}');
+    final response = await dio.get(
+      'discover/movie',
+      queryParameters: {
+        'api_key': apiKey,
+        'language': 'en-US',
+        'sort_by': 'popularity.desc',
+        'include_adult': false,
+        'release_date.gte': date,
+        'vote_count.gte': rating,
+        'with_genres': genreIds,
+      },
+    );
 
     final result = List<Map<String, dynamic>>.from(response.data['results']);
+
+    debugPrint('Request to get Movies => '
+        'Status: ${response.statusCode}, '
+        'Message: ${response.statusMessage}, '
+        'Movies: ${result[3]},');
+
     final movies = result.map((e) => MovieEntity.fromMap(e)).toList();
 
     return movies;

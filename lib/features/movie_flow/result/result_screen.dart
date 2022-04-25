@@ -17,60 +17,119 @@ class ResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final read = ref.read(movieFlowControllerProvider);
     final call = ref.read(movieFlowControllerProvider.notifier);
+    final watch = ref.watch(movieFlowControllerProvider);
     return WillPopScope(
       onWillPop: call.willPopCallback,
       child: Scaffold(
         appBar: AppBar(),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.bottomLeft,
-                    children: [
-                      const _CoverImage(),
-                      Positioned(
-                        width: MediaQuery.of(context).size.width,
-                        bottom: -(movieHeight / 2),
-                        child: _MovieImageDetails(
-                          movie: read.movie,
-                          movieHeight: movieHeight,
+        body: watch.movie.when(
+          data: (movie) => CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.bottomLeft,
+                      children: [
+                        _CoverImage(backDropPath: movie.backDropPath),
+                        Positioned(
+                          width: MediaQuery.of(context).size.width,
+                          bottom: -(movieHeight / 2),
+                          child: _MovieImageDetails(
+                            movie: movie,
+                            movieHeight: movieHeight,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: movieHeight / 2),
-                  Padding(
-                    padding: const EdgeInsets.all(kMediumSpacing),
-                    child: Text(
-                      read.movie.overview,
-                      style: Theme.of(context).textTheme.bodyText2,
+                      ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: movieHeight / 2),
+                    Padding(
+                      padding: const EdgeInsets.all(kMediumSpacing),
+                      child: Text(
+                        movie.overview,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
+                    const SizedBox(height: kSmallSpacing),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Recommended movies based on\n',
+                        children: [
+                          TextSpan(
+                            text: movie.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                        ],
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Button(
-              onPressed: () {
-                call.goToGenres();
-                Navigator.pop(context);
-              },
-              text: 'Find another movie',
-            ),
-            const SizedBox(height: kMediumSpacing),
-          ],
+              const SliverToBoxAdapter(
+                child: SizedBox(height: kMediumSpacing),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: kMediumSpacing,
+                  vertical: kMediumSpacing,
+                ),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 150,
+                    crossAxisSpacing: kSmallSpacing,
+                    mainAxisSpacing: kSmallSpacing,
+                    childAspectRatio: 0.6,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Image.network(
+                        movie.posterPath ?? '',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, e, s) => const SizedBox(),
+                      );
+                    },
+                    childCount: 10,
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: kBottomNavigationBarHeight),
+              ),
+            ],
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, s) => Center(child: Text('Error => $e')),
         ),
+        floatingActionButton: Button(
+          onPressed: () {
+            call.goToGenres();
+            Navigator.pop(context);
+          },
+          text: 'Find another movie',
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
 }
 
 class _CoverImage extends StatelessWidget {
-  const _CoverImage({Key? key}) : super(key: key);
+  const _CoverImage({
+    Key? key,
+    this.backDropPath,
+  }) : super(key: key);
+
+  final String? backDropPath;
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +149,10 @@ class _CoverImage extends StatelessWidget {
             ],
           ).createShader(Rect.fromLTRB(0, 0, bounds.width, bounds.height));
         },
-        child: const Image(
-          image: NetworkImage(
-              'https://image.tmdb.org/t/p/original/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg'),
+        child: Image.network(
+          backDropPath ?? '',
+          fit: BoxFit.cover,
+          errorBuilder: (context, e, s) => const SizedBox(),
         ),
       ),
     );
@@ -119,9 +179,10 @@ class _MovieImageDetails extends StatelessWidget {
           SizedBox(
             width: 100,
             height: movieHeight,
-            child: const Image(
-              image: NetworkImage(
-                  'https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg'),
+            child: Image.network(
+              movie.posterPath ?? '',
+              fit: BoxFit.cover,
+              errorBuilder: (context, e, s) => const SizedBox(),
             ),
           ),
           const SizedBox(width: kMediumSpacing),

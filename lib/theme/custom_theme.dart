@@ -26,6 +26,9 @@ class CustomTheme {
           brightness: Brightness.dark,
         ),
         scaffoldBackgroundColor: Palette.almostBlack,
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: Palette.red500,
+        ),
         appBarTheme: const AppBarTheme(
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -79,6 +82,9 @@ class CustomTheme {
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: Palette.grey200,
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: Palette.blue500,
+      ),
       appBarTheme: const AppBarTheme(
         elevation: 0,
         backgroundColor: Palette.grey200,
