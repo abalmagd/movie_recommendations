@@ -32,6 +32,12 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     super.dispose();
   }
 
+  Future<void> changeTheme() async {
+    state = state.copyWith(
+      themeMode: !state.themeMode,
+    );
+  }
+
   Future<void> loadGenres() async {
     state = state.copyWith(
       genres: const AsyncValue.loading(),

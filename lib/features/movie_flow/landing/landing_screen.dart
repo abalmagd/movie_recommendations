@@ -11,8 +11,17 @@ class LandingScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final watch = ref.read(movieFlowControllerProvider.notifier);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: watch.changeTheme,
+            icon: const Icon(Icons.dark_mode),
+            // color: watch.themeMode ? Colors.black : Colors.white,
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Text(
@@ -26,7 +35,7 @@ class LandingScreen extends ConsumerWidget {
             ),
           ),
           Button(
-            onPressed: ref.read(movieFlowControllerProvider.notifier).nextPage,
+            onPressed: watch.nextPage,
             text: 'Get Started',
           ),
         ],

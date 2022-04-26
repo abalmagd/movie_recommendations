@@ -22,7 +22,15 @@ class ResultScreen extends ConsumerWidget {
     return WillPopScope(
       onWillPop: call.willPopCallback,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: call.changeTheme,
+              icon: const Icon(Icons.dark_mode),
+              splashRadius: 20,
+            ),
+          ],
+        ),
         body: watch.movie.when(
           data: (movie) => CustomScrollView(
             physics: const BouncingScrollPhysics(),
@@ -135,7 +143,7 @@ class _CoverImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        minHeight: 231,
+        minHeight: 300,
       ),
       child: ShaderMask(
         blendMode: BlendMode.dstIn,

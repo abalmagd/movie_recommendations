@@ -17,6 +17,13 @@ class RatingScreen extends ConsumerWidget {
         leading: BackButton(
           onPressed: call.previousPage,
         ),
+        actions: [
+          IconButton(
+            onPressed: call.changeTheme,
+            icon: const Icon(Icons.dark_mode),
+            // color: watch.themeMode ? Colors.black : Colors.white,
+          ),
+        ],
       ),
       body: Column(
         children: [
