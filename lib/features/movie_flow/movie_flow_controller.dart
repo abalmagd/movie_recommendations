@@ -49,12 +49,11 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
       movie: const AsyncValue.loading(),
     );
     final selectedGenres = state.genres.asData?.value
-            .where((e) => e.isSelected)
-            .toList(growable: false) ??
-        [];
+        .where((e) => e.isSelected)
+        .toList(growable: false);
 
     final result = await _movieService.getRecommendedMovie(
-        state.rating, selectedGenres, state.yearsBack);
+        state.rating, selectedGenres ?? [], state.yearsBack);
 
     state = state.copyWith(
       movie: AsyncValue.data(result),
@@ -92,8 +91,9 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
       }
     }
     state.pageController.nextPage(
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOutCubic);
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   void previousPage() {
@@ -102,9 +102,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
         curve: Curves.easeOutCubic);
   }
 
-  void goToGenres() {
-    state.pageController.jumpToPage(1);
-  }
+  void goToGenres() => state.pageController.jumpToPage(1);
 
   Future<bool> willPopCallback() async {
     goToGenres();

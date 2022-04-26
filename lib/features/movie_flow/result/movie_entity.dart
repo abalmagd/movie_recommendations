@@ -17,15 +17,16 @@ class MovieEntity extends Equatable {
 
   factory MovieEntity.fromMap(Map<String, dynamic> map) {
     return MovieEntity(
-        title: map['title'],
-        overview: map['overview'],
-        genreIds: List.from(map['genre_ids']),
-        voteAverage: map['vote_average'],
-        // totalResults: map['total_results'],
-        // totalPages: map['total_pages'],
-        releaseDate: map['release_date'],
-        posterPath: map['poster_path'],
-        backDropPath: map['backdrop_path']);
+      title: map['title'],
+      overview: map['overview'],
+      genreIds: List.from(map['genre_ids']),
+      voteAverage: map['vote_average'],
+      // totalResults: map['total_results'],
+      // totalPages: map['total_pages'],
+      releaseDate: map['release_date'],
+      posterPath: map['poster_path'],
+      backDropPath: map['backdrop_path'],
+    );
   }
 
   final String title;
@@ -33,7 +34,6 @@ class MovieEntity extends Equatable {
   final List<int> genreIds;
   final String releaseDate;
   final num voteAverage;
-
   // final int totalResults;
   // final int totalPages;
   final String? posterPath;

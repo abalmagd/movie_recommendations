@@ -55,7 +55,7 @@ class TMDBMovieRepository implements MovieRepository {
     String genreIds,
   ) async {
     final response = await dio.get(
-      'discover/movie',
+      discoverMoviesEndpoint,
       queryParameters: {
         'api_key': apiKey,
         'language': 'en-US',
@@ -72,7 +72,9 @@ class TMDBMovieRepository implements MovieRepository {
     debugPrint('Request to get Movies => '
         'Status: ${response.statusCode}, '
         'Message: ${response.statusMessage}, '
-        'Movies: ${result[3]},');
+        'Movies: ${result.length},'
+        '# Pages: ${response.data['total_pages']},'
+        '# Results: ${response.data['total_results']},');
 
     final movies = result.map((e) => MovieEntity.fromMap(e)).toList();
 
