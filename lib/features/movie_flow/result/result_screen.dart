@@ -100,18 +100,93 @@ class ResultScreen extends ConsumerWidget {
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return Image.network(
-                        movie.posterPath ?? '',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, e, s) => const SizedBox(),
+                      return watch.similarMovies.when(
+                        data: (similarMovies) {
+                          final similarMovie = similarMovies[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Image.network(
+                                  similarMovie.posterPath ?? '',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, e, s) =>
+                                      const SizedBox(),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                similarMovie.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.fontSize,
+                                    ),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    similarMovie.releaseDate.substring(0, 4),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        ?.copyWith(
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.fontSize,
+                                        ),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    similarMovie.voteAverage
+                                            .toStringAsFixed(1)
+                                            .endsWith('0')
+                                        ? '${similarMovie.voteAverage.toInt()}'
+                                        : similarMovie.voteAverage
+                                            .toStringAsFixed(1),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        ?.copyWith(
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.fontSize,
+                                        ),
+                                  ),
+                                  const Icon(
+                                    Icons.star_rounded,
+                                    size: kMediumSpacing,
+                                    color: Colors.amber,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                        error: (e, s) => Container(
+                          color: Colors.red,
+                          width: 50,
+                          height: 50,
+                        ),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
                       );
                     },
-                    childCount: 10,
+                    childCount: watch.similarMovies.asData?.value.length,
                   ),
                 ),
               ),
               const SliverToBoxAdapter(
-                child: SizedBox(height: kBottomNavigationBarHeight),
+                child: SizedBox(
+                    height: kBottomNavigationBarHeight + kSmallSpacing),
               ),
             ],
           ),
@@ -204,6 +279,10 @@ class _MovieImageDetails extends StatelessWidget {
                 ),
                 Text(
                   movie.genresCommaSeparated,
+                  style: theme.textTheme.bodyText2,
+                ),
+                Text(
+                  movie.releaseDate.substring(0, 4),
                   style: theme.textTheme.bodyText2,
                 ),
                 Row(

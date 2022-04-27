@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 @immutable
 class MovieEntity extends Equatable {
   const MovieEntity({
+    required this.id,
     required this.title,
     required this.overview,
     required this.releaseDate,
@@ -17,6 +18,7 @@ class MovieEntity extends Equatable {
 
   factory MovieEntity.fromMap(Map<String, dynamic> map) {
     return MovieEntity(
+      id: map['id'],
       title: map['title'],
       overview: map['overview'],
       genreIds: List.from(map['genre_ids']),
@@ -30,10 +32,12 @@ class MovieEntity extends Equatable {
   }
 
   final String title;
+  final int id;
   final String overview;
   final List<int> genreIds;
   final String releaseDate;
   final num voteAverage;
+
   // final int totalResults;
   // final int totalPages;
   final String? posterPath;

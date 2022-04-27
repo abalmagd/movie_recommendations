@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/environment_variables.dart';
 import 'package:movie_recommendations/core/network/dio.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre_entity.dart';
@@ -15,6 +14,8 @@ abstract class MovieRepository {
     String date,
     String genreIds,
   );
+
+  Future<List<MovieEntity>> getSimilarMovies(int movieId);
 }
 
 final movieRepositoryProvider = Provider<MovieRepository>((ref) {
@@ -76,8 +77,26 @@ class TMDBMovieRepository implements MovieRepository {
         '# Pages: ${response.data['total_pages']},'
         '# Results: ${response.data['total_results']},');
 
-    final movies = result.map((e) => MovieEntity.fromMap(e)).toList();
+    final movieEntities = result.map((e) => MovieEntity.fromMap(e)).toList();
 
-    return movies;
+    return movieEntities;
+  }
+
+  @override
+  Future<List<MovieEntity>> getSimilarMovies(int movieId) async {
+    final similarMoviesEndpoint = '/movie/$movieId/similar';
+    final response = await dio.get(
+      similarMoviesEndpoint,
+      queryParameters: {
+        'api_key': apiKey,
+        'language': 'en-US',
+      },
+    );
+
+    final results = List<Map<String, dynamic>>.from(response.data['results']);
+
+    final movieEntities = results.map((e) => MovieEntity.fromMap(e)).toList();
+
+    return movieEntities;
   }
 }

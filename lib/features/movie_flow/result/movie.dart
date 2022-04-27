@@ -6,6 +6,7 @@ import 'package:movie_recommendations/features/movie_flow/result/movie_entity.da
 @immutable
 class Movie extends Equatable {
   const Movie({
+    required this.id,
     required this.title,
     required this.overview,
     required this.voteAverage,
@@ -16,7 +17,8 @@ class Movie extends Equatable {
   });
 
   Movie.initial()
-      : title = '',
+      : id = 0,
+        title = '',
         overview = '',
         voteAverage = 0,
         genres = [],
@@ -26,18 +28,20 @@ class Movie extends Equatable {
 
   factory Movie.fromEntity(MovieEntity entity, List<Genre> genres) {
     return Movie(
+      id: entity.id,
       title: entity.title,
       overview: entity.overview,
       voteAverage: entity.voteAverage,
       genres: genres,
       releaseDate: entity.releaseDate,
-      posterPath: 'https://image.tmdb.org/t/p/original/${entity.posterPath}',
+      posterPath: 'https://image.tmdb.org/t/p/w500/${entity.posterPath}',
       backDropPath:
           'https://image.tmdb.org/t/p/original/${entity.backDropPath}',
     );
   }
 
   final String title;
+  final int id;
   final String overview;
   final num voteAverage;
   final List<Genre> genres;
@@ -50,12 +54,14 @@ class Movie extends Equatable {
 
   @override
   String toString() =>
-      'Movie(title: $title, overview: $overview, voteAverage: $voteAverage, '
+      'Movie(id: $id, title: $title, overview: $overview, voteAverage: $voteAverage, '
       'genres: {$genresCommaSeparated}, releaseDate: $releaseDate, '
-      'backDropPath: $backDropPath, posterPath: $posterPath)';
+      'backDropPath: $backDropPath, posterPath: $posterPath, )';
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
+        id,
         title,
         overview,
         voteAverage,

@@ -11,6 +11,8 @@ abstract class MovieService {
   Future<Movie> getRecommendedMovie(
       int rating, List<Genre> genres, int yearsBack,
       [DateTime? yearsBackFromDate]);
+
+  Future<List<Movie>> getSimilarMovies(int movieId);
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {
@@ -62,5 +64,19 @@ class TMDBMovieService implements MovieService {
     final randomMovie = movies[rnd.nextInt(movies.length)];
 
     return randomMovie;
+  }
+
+  @override
+  Future<List<Movie>> getSimilarMovies(int movieId) async {
+    final similarMovieEntities =
+        await _movieRepository.getSimilarMovies(movieId);
+
+    // Todo: fix genres of similar movies
+    // It copies the genre of the original movie only
+
+    final similarMovies =
+        similarMovieEntities.map((e) => Movie.fromEntity(e, genres)).toList();
+
+    return similarMovies;
   }
 }

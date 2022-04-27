@@ -13,6 +13,7 @@ final movieFlowControllerProvider =
         pageController: PageController(),
         movie: AsyncValue.data(Movie.initial()),
         genres: const AsyncValue.data([]),
+        similarMovies: const AsyncValue.data([]),
       ),
       ref.watch(movieServiceProvider),
     );
@@ -53,6 +54,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
   Future<void> loadMovie() async {
     state = state.copyWith(
       movie: const AsyncValue.loading(),
+      similarMovies: const AsyncValue.loading(),
     );
     final selectedGenres = state.genres.asData?.value
         .where((e) => e.isSelected)
@@ -61,8 +63,11 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     final result = await _movieService.getRecommendedMovie(
         state.rating, selectedGenres ?? [], state.yearsBack);
 
+    final similarMovies = await _movieService.getSimilarMovies(result.id);
+
     state = state.copyWith(
       movie: AsyncValue.data(result),
+      similarMovies: AsyncValue.data(similarMovies),
     );
   }
 
