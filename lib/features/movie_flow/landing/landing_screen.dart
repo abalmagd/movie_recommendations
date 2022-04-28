@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 
 class LandingScreen extends ConsumerWidget {
@@ -11,15 +12,11 @@ class LandingScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final watch = ref.read(movieFlowControllerProvider.notifier);
+    final call = ref.read(movieFlowControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: watch.changeTheme,
-            icon: const Icon(Icons.dark_mode),
-            // color: watch.themeMode ? Colors.black : Colors.white,
-          ),
+          ThemeIconButton(onPressed: call.changeTheme),
         ],
       ),
       body: Column(
@@ -35,7 +32,7 @@ class LandingScreen extends ConsumerWidget {
             ),
           ),
           Button(
-            onPressed: watch.nextPage,
+            onPressed: call.nextPage,
             text: 'Get Started',
           ),
         ],

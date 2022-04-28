@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/list_card.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 
@@ -15,15 +16,9 @@ class GenreScreen extends ConsumerWidget {
     final call = ref.read(movieFlowControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: call.previousPage,
-        ),
+        leading: BackButton(onPressed: call.previousPage),
         actions: [
-          IconButton(
-            onPressed: call.changeTheme,
-            icon: const Icon(Icons.dark_mode),
-            // color: watch.themeMode ? Colors.black : Colors.white,
-          ),
+          ThemeIconButton(onPressed: call.changeTheme),
         ],
       ),
       body: Column(
@@ -42,7 +37,7 @@ class GenreScreen extends ConsumerWidget {
                     final genre = genres[index];
                     return ListCard(
                       genre: genre,
-                      onTap: () => call.toggleSelected(genre),
+                      onTap: () => call.toggleSelectedGenre(genre),
                     );
                   },
                   separatorBuilder: (context, index) =>
@@ -59,22 +54,25 @@ class GenreScreen extends ConsumerWidget {
             ),
           ),
           Button(
-            onPressed: () {
-              call.isGenreSelected()
-                  ? call.nextPage()
-                  : ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'At least 1 genre must be selected',
-                          textAlign: TextAlign.center,
-                        ),
-                        duration: Duration(milliseconds: 1000),
-                        dismissDirection: DismissDirection.none,
-                        padding: EdgeInsets.all(kLargeSpacing),
-                      ),
-                    );
-            },
             text: 'Continue',
+            onPressed: () {
+              if (call.isGenreSelected()) {
+                call.nextPage();
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'At least 1 genre must be selected',
+                      textAlign: TextAlign.center,
+                    ),
+                    duration: Duration(milliseconds: 1500),
+                    behavior: SnackBarBehavior.floating,
+                    dismissDirection: DismissDirection.none,
+                    padding: EdgeInsets.all(kLargeSpacing),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

@@ -53,14 +53,13 @@ class Movie extends Equatable {
       genres.map((genre) => genre.name).toList().join(', ');
 
   @override
-  String toString() =>
-      'Movie(id: $id, title: $title, overview: $overview, voteAverage: $voteAverage, '
-      'genres: {$genresCommaSeparated}, releaseDate: $releaseDate, '
-      'backDropPath: $backDropPath, posterPath: $posterPath, )';
+  String toString() => 'Movie(id: $id, title: $title, overview: $overview, '
+      'voteAverage: $voteAverage, genres: {$genresCommaSeparated}, '
+      'releaseDate: $releaseDate, backDropPath: $backDropPath, '
+      'posterPath: $posterPath)';
 
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
         id,
         title,
         overview,

@@ -71,7 +71,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     );
   }
 
-  void toggleSelected(Genre genre) {
+  void toggleSelectedGenre(Genre genre) {
     state = state.copyWith(
       genres: AsyncValue.data([
         for (final oldGenre in state.genres.asData!.value)
@@ -117,8 +117,6 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
   Future<bool> willPopCallback() async {
     goToGenres();
-    // await showDialog or Show add banners or whatever
-    // then
-    return true; // return true if the route to be popped
+    return true;
   }
 }

@@ -54,7 +54,9 @@ class TMDBMovieService implements MovieService {
             e,
             this
                 .genres
-                .where((element) => e.genreIds.contains(element.id))
+                .where(
+                  (element) => e.genreIds.contains(element.id),
+                )
                 .toList(),
           ),
         )
@@ -74,8 +76,14 @@ class TMDBMovieService implements MovieService {
     // Todo: fix genres of similar movies
     // It copies the genre of the original movie only
 
-    final similarMovies =
-        similarMovieEntities.map((e) => Movie.fromEntity(e, genres)).toList();
+    final similarMovies = similarMovieEntities
+        .map(
+          (e) => Movie.fromEntity(
+            e,
+            genres.where((element) => e.genreIds.contains(element.id)).toList(),
+          ),
+        )
+        .toList();
 
     return similarMovies;
   }

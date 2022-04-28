@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 
 class RatingScreen extends ConsumerWidget {
@@ -11,18 +12,11 @@ class RatingScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final call = ref.read(movieFlowControllerProvider.notifier);
     final watch = ref.watch(movieFlowControllerProvider);
-
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: call.previousPage,
-        ),
+        leading: BackButton(onPressed: call.previousPage),
         actions: [
-          IconButton(
-            onPressed: call.changeTheme,
-            icon: const Icon(Icons.dark_mode),
-            // color: watch.themeMode ? Colors.black : Colors.white,
-          ),
+          ThemeIconButton(onPressed: call.changeTheme),
         ],
       ),
       body: Column(

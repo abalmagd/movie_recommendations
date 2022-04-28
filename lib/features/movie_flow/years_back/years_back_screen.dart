@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/result_screen.dart';
 
@@ -14,15 +15,9 @@ class YearsBackScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: call.previousPage,
-        ),
+        leading: BackButton(onPressed: call.previousPage),
         actions: [
-          IconButton(
-            onPressed: call.changeTheme,
-            icon: const Icon(Icons.dark_mode),
-            // color: watch.themeMode ? Colors.black : Colors.white,
-          ),
+          ThemeIconButton(onPressed: call.changeTheme),
         ],
       ),
       body: Column(
@@ -33,20 +28,15 @@ class YearsBackScreen extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
           const Spacer(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${watch.yearsBack}',
-                style: theme.textTheme.headline2,
-              ),
-              Text(
-                'Years Back',
-                style: theme.textTheme.headline4?.copyWith(
-                  color: theme.textTheme.headline4?.color?.withOpacity(0.70),
-                ),
-              ),
-            ],
+          Text(
+            '${watch.yearsBack}',
+            style: theme.textTheme.headline2,
+          ),
+          Text(
+            'Years Back',
+            style: theme.textTheme.headline4?.copyWith(
+              color: theme.textTheme.headline4?.color?.withOpacity(0.70),
+            ),
           ),
           const Spacer(),
           Slider(

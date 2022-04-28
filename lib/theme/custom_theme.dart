@@ -100,21 +100,16 @@ class CustomTheme {
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
-        headline2: theme.primaryTextTheme.headline2?.copyWith(
-          color: Colors.black,
-        ),
-        headline4: theme.primaryTextTheme.headline4?.copyWith(
-          color: Colors.black,
-        ),
-        headline5: theme.primaryTextTheme.headline5?.copyWith(
-          color: Colors.black,
-        ),
-        headline6: theme.primaryTextTheme.headline6?.copyWith(
-          color: Colors.black,
-        ),
-        bodyText2: theme.primaryTextTheme.bodyText2?.copyWith(
-          color: Colors.black,
-        ),
+        headline2:
+            theme.primaryTextTheme.headline2?.copyWith(color: Colors.black),
+        headline4:
+            theme.primaryTextTheme.headline4?.copyWith(color: Colors.black),
+        headline5:
+            theme.primaryTextTheme.headline5?.copyWith(color: Colors.black),
+        headline6:
+            theme.primaryTextTheme.headline6?.copyWith(color: Colors.black),
+        bodyText2:
+            theme.primaryTextTheme.bodyText2?.copyWith(color: Colors.black),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

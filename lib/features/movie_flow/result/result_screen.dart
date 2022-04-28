@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 
@@ -19,16 +20,13 @@ class ResultScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final call = ref.read(movieFlowControllerProvider.notifier);
     final watch = ref.watch(movieFlowControllerProvider);
+    final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: call.willPopCallback,
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-              onPressed: call.changeTheme,
-              icon: const Icon(Icons.dark_mode),
-              splashRadius: 20,
-            ),
+            ThemeIconButton(onPressed: call.changeTheme),
           ],
         ),
         body: watch.movie.when(
@@ -58,7 +56,7 @@ class ResultScreen extends ConsumerWidget {
                       padding: const EdgeInsets.all(kMediumSpacing),
                       child: Text(
                         movie.overview,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: theme.textTheme.bodyText2,
                       ),
                     ),
                     const SizedBox(height: kSmallSpacing),
@@ -68,15 +66,12 @@ class ResultScreen extends ConsumerWidget {
                         children: [
                           TextSpan(
                             text: movie.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
+                            style: theme.textTheme.headline5?.copyWith(
+                              color: theme.colorScheme.primary,
+                            ),
                           ),
                         ],
-                        style: Theme.of(context).textTheme.headline6,
+                        style: theme.textTheme.headline6,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -87,10 +82,7 @@ class ResultScreen extends ConsumerWidget {
                 child: SizedBox(height: kMediumSpacing),
               ),
               SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: kMediumSpacing,
-                  vertical: kMediumSpacing,
-                ),
+                padding: const EdgeInsets.all(kMediumSpacing),
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 150,
@@ -110,8 +102,6 @@ class ResultScreen extends ConsumerWidget {
                                 child: Image.network(
                                   similarMovie.posterPath ?? '',
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, e, s) =>
-                                      const SizedBox(),
                                 ),
                               ),
                               const SizedBox(height: 2),
@@ -119,29 +109,18 @@ class ResultScreen extends ConsumerWidget {
                                 similarMovie.title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.fontSize,
-                                    ),
+                                style: theme.textTheme.bodyText2?.copyWith(
+                                  fontSize: theme.textTheme.bodySmall?.fontSize,
+                                ),
                               ),
                               Row(
                                 children: [
                                   Text(
                                     similarMovie.releaseDate.substring(0, 4),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText2
-                                        ?.copyWith(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.fontSize,
-                                        ),
+                                    style: theme.textTheme.bodyText2?.copyWith(
+                                      fontSize:
+                                          theme.textTheme.bodySmall?.fontSize,
+                                    ),
                                   ),
                                   const Spacer(),
                                   Text(
@@ -151,15 +130,10 @@ class ResultScreen extends ConsumerWidget {
                                         ? '${similarMovie.voteAverage.toInt()}'
                                         : similarMovie.voteAverage
                                             .toStringAsFixed(1),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText2
-                                        ?.copyWith(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.fontSize,
-                                        ),
+                                    style: theme.textTheme.bodyText2?.copyWith(
+                                      fontSize:
+                                          theme.textTheme.bodySmall?.fontSize,
+                                    ),
                                   ),
                                   const Icon(
                                     Icons.star_rounded,
@@ -171,11 +145,7 @@ class ResultScreen extends ConsumerWidget {
                             ],
                           );
                         },
-                        error: (e, s) => Container(
-                          color: Colors.red,
-                          width: 50,
-                          height: 50,
-                        ),
+                        error: (e, s) => Text(e.toString()),
                         loading: () =>
                             const Center(child: CircularProgressIndicator()),
                       );
@@ -217,9 +187,7 @@ class _CoverImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        minHeight: 300,
-      ),
+      constraints: const BoxConstraints(minHeight: 300),
       child: ShaderMask(
         blendMode: BlendMode.dstIn,
         shaderCallback: (Rect bounds) {
@@ -298,7 +266,7 @@ class _MovieImageDetails extends StatelessWidget {
                       Icons.star_rounded,
                       size: 20,
                       color: Colors.amber,
-                    )
+                    ),
                   ],
                 ),
               ],
