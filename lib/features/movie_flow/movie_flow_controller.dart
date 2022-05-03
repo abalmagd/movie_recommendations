@@ -13,7 +13,7 @@ final movieFlowControllerProvider =
         pageController: PageController(),
         movie: AsyncValue.data(Movie.initial()),
         genres: const AsyncValue.data([]),
-        similarMovies: const AsyncValue.data([]),
+        recommendedMovies: const AsyncValue.data([]),
       ),
       ref.watch(movieServiceProvider),
     );
@@ -33,7 +33,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     super.dispose();
   }
 
-  Future<void> changeTheme() async {
+  void changeTheme() async {
     state = state.copyWith(
       themeMode: !state.themeMode,
     );
@@ -51,23 +51,40 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     );
   }
 
-  Future<void> loadMovie() async {
+  Future<void> loadMovies({int? movieId}) async {
     state = state.copyWith(
       movie: const AsyncValue.loading(),
-      similarMovies: const AsyncValue.loading(),
+      recommendedMovies: const AsyncValue.loading(),
     );
+
     final selectedGenres = state.genres.asData?.value
         .where((e) => e.isSelected)
         .toList(growable: false);
 
-    final result = await _movieService.getRecommendedMovie(
+    final result = await _movieService.getMovie(
         state.rating, selectedGenres ?? [], state.yearsBack);
 
-    final similarMovies = await _movieService.getSimilarMovies(result.id);
+    final recommendedMovies =
+        await _movieService.getRecommendedMovies(result.id);
 
     state = state.copyWith(
       movie: AsyncValue.data(result),
-      similarMovies: AsyncValue.data(similarMovies),
+      recommendedMovies: AsyncValue.data(recommendedMovies),
+    );
+  }
+
+  Future<void> loadRecommendedMovie(Movie movie) async {
+    state = state.copyWith(
+      movie: AsyncValue.data(movie),
+      recommendedMovies: const AsyncValue.loading(),
+    );
+
+    final recommendedMovies =
+        await _movieService.getRecommendedMovies(movie.id);
+
+    state = state.copyWith(
+      movie: AsyncValue.data(movie),
+      recommendedMovies: AsyncValue.data(recommendedMovies),
     );
   }
 

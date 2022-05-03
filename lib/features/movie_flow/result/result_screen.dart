@@ -88,69 +88,86 @@ class ResultScreen extends ConsumerWidget {
                     maxCrossAxisExtent: 150,
                     crossAxisSpacing: kSmallSpacing,
                     mainAxisSpacing: kSmallSpacing,
-                    childAspectRatio: 0.6,
+                    childAspectRatio: 9 / 16,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return watch.similarMovies.when(
-                        data: (similarMovies) {
-                          final similarMovie = similarMovies[index];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Image.network(
-                                  similarMovie.posterPath ?? '',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                similarMovie.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodyText2?.copyWith(
-                                  fontSize: theme.textTheme.bodySmall?.fontSize,
-                                ),
-                              ),
-                              Row(
+                      return watch.recommendedMovies.when(
+                        data: (recommendedMovies) {
+                          final recommendedMovie = recommendedMovies[index];
+                          return Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                Navigator.pushReplacement(
+                                    context, ResultScreen.route());
+                                call.loadRecommendedMovie(recommendedMovie);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Expanded(
+                                    child: Image.network(
+                                      recommendedMovie.posterPath ?? '',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
                                   Text(
-                                    similarMovie.releaseDate.substring(0, 4),
+                                    recommendedMovie.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: theme.textTheme.bodyText2?.copyWith(
                                       fontSize:
                                           theme.textTheme.bodySmall?.fontSize,
                                     ),
                                   ),
-                                  const Spacer(),
-                                  Text(
-                                    similarMovie.voteAverage
-                                            .toStringAsFixed(1)
-                                            .endsWith('0')
-                                        ? '${similarMovie.voteAverage.toInt()}'
-                                        : similarMovie.voteAverage
-                                            .toStringAsFixed(1),
-                                    style: theme.textTheme.bodyText2?.copyWith(
-                                      fontSize:
-                                          theme.textTheme.bodySmall?.fontSize,
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: kSmallSpacing),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          recommendedMovie.releaseDate
+                                              .substring(0, 4),
+                                          style: theme.textTheme.bodyText2
+                                              ?.copyWith(
+                                            fontSize: theme
+                                                .textTheme.bodySmall?.fontSize,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          recommendedMovie.voteAverage
+                                                  .toStringAsFixed(1)
+                                                  .endsWith('0')
+                                              ? '${recommendedMovie.voteAverage.toInt()}'
+                                              : recommendedMovie.voteAverage
+                                                  .toStringAsFixed(1),
+                                          style: theme.textTheme.bodyText2
+                                              ?.copyWith(
+                                            fontSize: theme
+                                                .textTheme.bodySmall?.fontSize,
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.star_rounded,
+                                          size: kMediumSpacing,
+                                          color: Colors.amber,
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  const Icon(
-                                    Icons.star_rounded,
-                                    size: kMediumSpacing,
-                                    color: Colors.amber,
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           );
                         },
                         error: (e, s) => Text(e.toString()),
-                        loading: () =>
-                            const Center(child: CircularProgressIndicator()),
+                        loading: () => null,
                       );
                     },
-                    childCount: watch.similarMovies.asData?.value.length,
+                    childCount: watch.recommendedMovies.asData?.value.length,
                   ),
                 ),
               ),
@@ -186,8 +203,9 @@ class _CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 300),
+      constraints: BoxConstraints(minHeight: height / 3),
       child: ShaderMask(
         blendMode: BlendMode.dstIn,
         shaderCallback: (Rect bounds) {
@@ -256,7 +274,7 @@ class _MovieImageDetails extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${movie.voteAverage}',
+                      movie.voteAverage.toStringAsFixed(1),
                       style: theme.textTheme.bodyText2?.copyWith(
                         color:
                             theme.textTheme.bodyText2?.color?.withOpacity(0.65),

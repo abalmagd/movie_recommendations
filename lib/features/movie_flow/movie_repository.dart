@@ -9,13 +9,13 @@ import 'package:movie_recommendations/features/movie_flow/result/movie_entity.da
 abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
 
-  Future<List<MovieEntity>> getRecommendedMovies(
+  Future<List<MovieEntity>> getMovie(
     double rating,
     String date,
     String genreIds,
   );
 
-  Future<List<MovieEntity>> getSimilarMovies(int movieId);
+  Future<List<MovieEntity>> getRecommendedMovies(int movieId);
 }
 
 final movieRepositoryProvider = Provider<MovieRepository>((ref) {
@@ -50,7 +50,7 @@ class TMDBMovieRepository implements MovieRepository {
   }
 
   @override
-  Future<List<MovieEntity>> getRecommendedMovies(
+  Future<List<MovieEntity>> getMovie(
     double rating,
     String date,
     String genreIds,
@@ -83,10 +83,10 @@ class TMDBMovieRepository implements MovieRepository {
   }
 
   @override
-  Future<List<MovieEntity>> getSimilarMovies(int movieId) async {
-    final similarMoviesEndpoint = '/movie/$movieId/similar';
+  Future<List<MovieEntity>> getRecommendedMovies(int movieId) async {
+    final recommendedMoviesEndpoint = '/movie/$movieId/recommendations';
     final response = await dio.get(
-      similarMoviesEndpoint,
+      recommendedMoviesEndpoint,
       queryParameters: {
         'api_key': apiKey,
         'language': 'en-US',

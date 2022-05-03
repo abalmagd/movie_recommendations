@@ -8,11 +8,10 @@ import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 abstract class MovieService {
   Future<List<Genre>> getGenres();
 
-  Future<Movie> getRecommendedMovie(
-      int rating, List<Genre> genres, int yearsBack,
+  Future<Movie> getMovie(int rating, List<Genre> genres, int yearsBack,
       [DateTime? yearsBackFromDate]);
 
-  Future<List<Movie>> getSimilarMovies(int movieId);
+  Future<List<Movie>> getRecommendedMovies(int movieId);
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {
@@ -35,14 +34,13 @@ class TMDBMovieService implements MovieService {
   }
 
   @override
-  Future<Movie> getRecommendedMovie(
-      int rating, List<Genre> genres, int yearsBack,
+  Future<Movie> getMovie(int rating, List<Genre> genres, int yearsBack,
       [DateTime? yearsBackFromDate]) async {
     final date = yearsBackFromDate ?? DateTime.now();
     final year = date.year - yearsBack;
     final genreIds = genres.map((e) => e.id).toList().join(',');
 
-    final movieEntities = await _movieRepository.getRecommendedMovies(
+    final movieEntities = await _movieRepository.getMovie(
       rating.toDouble(),
       '$year-01-01',
       genreIds,
@@ -69,12 +67,9 @@ class TMDBMovieService implements MovieService {
   }
 
   @override
-  Future<List<Movie>> getSimilarMovies(int movieId) async {
+  Future<List<Movie>> getRecommendedMovies(int movieId) async {
     final similarMovieEntities =
-        await _movieRepository.getSimilarMovies(movieId);
-
-    // Todo: fix genres of similar movies
-    // It copies the genre of the original movie only
+        await _movieRepository.getRecommendedMovies(movieId);
 
     final similarMovies = similarMovieEntities
         .map(
