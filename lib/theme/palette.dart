@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Palette {
   // Dark theme palette
-  static const almostBlack = Color(0xFF040b13);
+  static const almostBlack = Color(0xFF212121);
   static const red100 = Color(0xFFffcdd2);
   static const red200 = Color(0xFFef9a9a);
   static const red300 = Color(0xFFe57373);
@@ -14,7 +14,7 @@ class Palette {
   static const red900 = Color(0xFFb71c1c);
 
   // Light theme Palette
-  static const grey200 = Color(0xFFeeeeee);
+  static const grey50 = Color(0xFFfafafa);
   static const blue100 = Color(0xFFbbdefb);
   static const blue200 = Color(0xFF90caf9);
   static const blue300 = Color(0xFF64b5f6);

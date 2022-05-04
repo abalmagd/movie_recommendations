@@ -99,8 +99,8 @@ class ResultScreen extends ConsumerWidget {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () async {
-                                Navigator.pushReplacement(
-                                    context, ResultScreen.route());
+                                // Navigator.pushReplacement(
+                                //     context, ResultScreen.route());
                                 call.loadRecommendedMovie(recommendedMovie);
                               },
                               child: Column(

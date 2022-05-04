@@ -81,13 +81,13 @@ class CustomTheme {
         accentColor: Palette.blue500,
         brightness: Brightness.light,
       ),
-      scaffoldBackgroundColor: Palette.grey200,
+      scaffoldBackgroundColor: Palette.grey50,
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: Palette.blue500,
       ),
       appBarTheme: const AppBarTheme(
         elevation: 0,
-        backgroundColor: Palette.grey200,
+        backgroundColor: Palette.grey50,
         iconTheme: IconThemeData(color: Colors.black),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,

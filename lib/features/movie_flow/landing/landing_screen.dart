@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
@@ -9,12 +11,19 @@ class LandingScreen extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
+  final String landingImageBlue = movieNightBlue;
+  final String landingImageRed = movieNightRed;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final call = ref.read(movieFlowControllerProvider.notifier);
+    final brightness = Theme.of(context).brightness;
     return Scaffold(
       appBar: AppBar(
+        leading: CloseButton(
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           ThemeIconButton(onPressed: call.changeTheme),
         ],
@@ -26,9 +35,11 @@ class LandingScreen extends ConsumerWidget {
             style: theme.textTheme.headline5,
             textAlign: TextAlign.center,
           ),
-          const Expanded(
-            child: Image(
-              image: AssetImage('images/undraw_netflix_q00o.png'),
+          Expanded(
+            child: SvgPicture.asset(
+              brightness == Brightness.dark
+                  ? landingImageRed
+                  : landingImageBlue,
             ),
           ),
           Button(
