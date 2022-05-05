@@ -23,7 +23,7 @@ class Button extends StatelessWidget {
         style: TextButton.styleFrom(
           minimumSize: Size(width, 52),
         ),
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
             : Text(

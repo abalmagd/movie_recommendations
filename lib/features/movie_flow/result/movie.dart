@@ -20,7 +20,7 @@ class Movie extends Equatable {
       : id = 0,
         title = '',
         overview = '',
-        voteAverage = 0,
+        voteAverage = '0',
         genres = [],
         releaseDate = '',
         backDropPath = '',
@@ -31,9 +31,11 @@ class Movie extends Equatable {
       id: entity.id,
       title: entity.title,
       overview: entity.overview,
-      voteAverage: entity.voteAverage,
+      voteAverage: entity.voteAverage.toStringAsFixed(1).endsWith('0')
+          ? entity.voteAverage.toStringAsFixed(0)
+          : entity.voteAverage.toStringAsFixed(1),
       genres: genres,
-      releaseDate: entity.releaseDate,
+      releaseDate: entity.releaseDate.substring(0, 4),
       posterPath: 'https://image.tmdb.org/t/p/w500/${entity.posterPath}',
       backDropPath:
           'https://image.tmdb.org/t/p/original/${entity.backDropPath}',
@@ -43,7 +45,7 @@ class Movie extends Equatable {
   final String title;
   final int id;
   final String overview;
-  final num voteAverage;
+  final String voteAverage;
   final List<Genre> genres;
   final String releaseDate;
   final String? backDropPath;
@@ -56,7 +58,7 @@ class Movie extends Equatable {
   String toString() => 'Movie(id: $id, title: $title, overview: $overview, '
       'voteAverage: $voteAverage, genres: {$genresCommaSeparated}, '
       'releaseDate: $releaseDate, backDropPath: $backDropPath, '
-      'posterPath: $posterPath)';
+      'posterPath: $posterPath,)';
 
   @override
   List<Object?> get props => [

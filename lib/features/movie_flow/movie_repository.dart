@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/environment_variables.dart';
 import 'package:movie_recommendations/core/network/dio.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre_entity.dart';
+import 'package:movie_recommendations/features/movie_flow/result/cast.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie_entity.dart';
 
 abstract class MovieRepository {
@@ -16,6 +17,8 @@ abstract class MovieRepository {
   );
 
   Future<List<MovieEntity>> getRecommendedMovies(int movieId);
+
+  Future<List<Cast>> getMovieCast(int movieId);
 }
 
 final movieRepositoryProvider = Provider<MovieRepository>((ref) {
@@ -84,7 +87,7 @@ class TMDBMovieRepository implements MovieRepository {
 
   @override
   Future<List<MovieEntity>> getRecommendedMovies(int movieId) async {
-    final recommendedMoviesEndpoint = '/movie/$movieId/recommendations';
+    final String recommendedMoviesEndpoint = '/movie/$movieId/recommendations';
     final response = await dio.get(
       recommendedMoviesEndpoint,
       queryParameters: {
@@ -98,5 +101,22 @@ class TMDBMovieRepository implements MovieRepository {
     final movieEntities = results.map((e) => MovieEntity.fromMap(e)).toList();
 
     return movieEntities;
+  }
+
+  @override
+  Future<List<Cast>> getMovieCast(int movieId) async {
+    final String creditsEndpoint = '/movie/$movieId/credits';
+    final response = await dio.get(
+      creditsEndpoint,
+      queryParameters: {
+        'api_key': apiKey,
+        'language': 'en-US',
+      },
+    );
+
+    final results = List<Map<String, dynamic>>.from(response.data['cast']);
+    final cast = results.map((e) => Cast.fromMap(e)).toList();
+
+    return cast;
   }
 }

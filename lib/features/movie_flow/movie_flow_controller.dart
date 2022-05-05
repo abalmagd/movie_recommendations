@@ -12,6 +12,7 @@ final movieFlowControllerProvider =
       MovieFlowState(
         pageController: PageController(),
         movie: AsyncValue.data(Movie.initial()),
+        cast: const AsyncValue.data([]),
         genres: const AsyncValue.data([]),
         recommendedMovies: const AsyncValue.data([]),
       ),
@@ -30,16 +31,11 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
   @override
   void dispose() {
     state.pageController.dispose();
+    state.scrollController?.dispose();
     super.dispose();
   }
 
-  void changeTheme() async {
-    state = state.copyWith(
-      themeMode: !state.themeMode,
-    );
-  }
-
-  Future<void> loadGenres() async {
+  void loadGenres() async {
     state = state.copyWith(
       genres: const AsyncValue.loading(),
     );
@@ -51,40 +47,58 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     );
   }
 
-  Future<void> loadMovies({int? movieId}) async {
+  Future<void> loadResults() async {
     state = state.copyWith(
       movie: const AsyncValue.loading(),
       recommendedMovies: const AsyncValue.loading(),
+      cast: const AsyncValue.loading(),
     );
 
     final selectedGenres = state.genres.asData?.value
         .where((e) => e.isSelected)
         .toList(growable: false);
 
-    final result = await _movieService.getMovie(
-        state.rating, selectedGenres ?? [], state.yearsBack);
-
-    final recommendedMovies =
-        await _movieService.getRecommendedMovies(result.id);
-
-    state = state.copyWith(
-      movie: AsyncValue.data(result),
-      recommendedMovies: AsyncValue.data(recommendedMovies),
-    );
-  }
-
-  Future<void> loadRecommendedMovie(Movie movie) async {
-    state = state.copyWith(
-      movie: AsyncValue.data(movie),
-      recommendedMovies: const AsyncValue.loading(),
+    final movie = await _movieService.getMovie(
+      state.rating,
+      selectedGenres!,
+      state.yearsBack,
     );
 
     final recommendedMovies =
         await _movieService.getRecommendedMovies(movie.id);
 
+    final cast = await _movieService.getMovieCast(movie.id);
+
+    state = state.copyWith(
+      movie: AsyncValue.data(movie),
+      scrollController: ScrollController(),
+      recommendedMovies: AsyncValue.data(recommendedMovies),
+      cast: AsyncValue.data(cast),
+    );
+  }
+
+  void changeMovieFromRecommendations(Movie movie) async {
+    state = state.copyWith(
+      movie: AsyncValue.data(movie),
+      recommendedMovies: const AsyncValue.loading(),
+      cast: const AsyncValue.loading(),
+    );
+
+    final recommendedMovies =
+        await _movieService.getRecommendedMovies(movie.id);
+
+    final cast = await _movieService.getMovieCast(movie.id);
+
     state = state.copyWith(
       movie: AsyncValue.data(movie),
       recommendedMovies: AsyncValue.data(recommendedMovies),
+      cast: AsyncValue.data(cast),
+    );
+  }
+
+  void changeTheme() async {
+    state = state.copyWith(
+      themeMode: !state.themeMode,
     );
   }
 

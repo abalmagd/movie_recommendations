@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_repository.dart';
+import 'package:movie_recommendations/features/movie_flow/result/cast.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 
 abstract class MovieService {
@@ -12,6 +13,8 @@ abstract class MovieService {
       [DateTime? yearsBackFromDate]);
 
   Future<List<Movie>> getRecommendedMovies(int movieId);
+
+  Future<List<Cast>> getMovieCast(int movieId);
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {
@@ -81,5 +84,15 @@ class TMDBMovieService implements MovieService {
         .toList();
 
     return similarMovies;
+  }
+
+  @override
+  Future<List<Cast>> getMovieCast(int movieId) async {
+    return await _movieRepository.getMovieCast(movieId);
+    // final cast = await _movieRepository.getMovieCast(movieId);
+
+    // debugPrint(cast.take(10).toList().toString());
+
+    // return cast.take(10).toList();
   }
 }

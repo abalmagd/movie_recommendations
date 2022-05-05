@@ -6,15 +6,17 @@ import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 
+import 'cast.dart';
+
 class ResultScreen extends ConsumerWidget {
   const ResultScreen({Key? key}) : super(key: key);
+
+  final double movieHeight = 150;
 
   static route({bool fullScreenDialog = true}) => MaterialPageRoute(
         builder: (context) => const ResultScreen(),
         fullscreenDialog: fullScreenDialog,
       );
-
-  final double movieHeight = 150;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,6 +33,7 @@ class ResultScreen extends ConsumerWidget {
         ),
         body: watch.movie.when(
           data: (movie) => CustomScrollView(
+            controller: watch.scrollController,
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverList(
@@ -51,129 +54,72 @@ class ResultScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: movieHeight / 2),
+                    SizedBox(height: (movieHeight / 2) + kMediumSpacing),
                     Padding(
-                      padding: const EdgeInsets.all(kMediumSpacing),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kMediumSpacing),
                       child: Text(
                         movie.overview,
                         style: theme.textTheme.bodyText2,
                       ),
                     ),
-                    const SizedBox(height: kSmallSpacing),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Recommended movies based on\n',
-                        children: [
-                          TextSpan(
-                            text: movie.title,
-                            style: theme.textTheme.headline5?.copyWith(
-                              color: theme.colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                        style: theme.textTheme.headline6,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
                   ],
                 ),
               ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: kMediumSpacing),
+              SliverPadding(
+                padding: const EdgeInsets.all(kMediumSpacing),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'Cast',
+                    style: theme.textTheme.headline6,
+                  ),
+                ),
+              ),
+              watch.cast.when(
+                data: (cast) => _Cast(cast: cast),
+                error: (e, s) => Text(e.toString()),
+                loading: () => const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 185,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(kMediumSpacing),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 150,
-                    crossAxisSpacing: kSmallSpacing,
-                    mainAxisSpacing: kSmallSpacing,
-                    childAspectRatio: 9 / 16,
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'Similar Movies',
+                    style: theme.textTheme.headline6,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return watch.recommendedMovies.when(
-                        data: (recommendedMovies) {
-                          final recommendedMovie = recommendedMovies[index];
-                          return Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () async {
-                                // Navigator.pushReplacement(
-                                //     context, ResultScreen.route());
-                                call.loadRecommendedMovie(recommendedMovie);
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Image.network(
-                                      recommendedMovie.posterPath ?? '',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    recommendedMovie.title,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: theme.textTheme.bodyText2?.copyWith(
-                                      fontSize:
-                                          theme.textTheme.bodySmall?.fontSize,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: kSmallSpacing),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          recommendedMovie.releaseDate
-                                              .substring(0, 4),
-                                          style: theme.textTheme.bodyText2
-                                              ?.copyWith(
-                                            fontSize: theme
-                                                .textTheme.bodySmall?.fontSize,
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          recommendedMovie.voteAverage
-                                                  .toStringAsFixed(1)
-                                                  .endsWith('0')
-                                              ? '${recommendedMovie.voteAverage.toInt()}'
-                                              : recommendedMovie.voteAverage
-                                                  .toStringAsFixed(1),
-                                          style: theme.textTheme.bodyText2
-                                              ?.copyWith(
-                                            fontSize: theme
-                                                .textTheme.bodySmall?.fontSize,
-                                          ),
-                                        ),
-                                        const Icon(
-                                          Icons.star_rounded,
-                                          size: kMediumSpacing,
-                                          color: Colors.amber,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        error: (e, s) => Text(e.toString()),
-                        loading: () => null,
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
+                sliver: watch.recommendedMovies.when(
+                  data: (recommendedMovies) {
+                    if (recommendedMovies.isNotEmpty) {
+                      return _RecommendedMovies(
+                        recommendedMovies: recommendedMovies,
+                        ref: ref,
                       );
-                    },
-                    childCount: watch.recommendedMovies.asData?.value.length,
+                    }
+                    return const SliverToBoxAdapter(
+                      child: Center(
+                        child: Text('No similar movies are found'),
+                      ),
+                    );
+                  },
+                  error: (e, s) =>
+                      SliverToBoxAdapter(child: Text(e.toString())),
+                  loading: () => const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
                   ),
                 ),
               ),
               const SliverToBoxAdapter(
                 child: SizedBox(
-                    height: kBottomNavigationBarHeight + kSmallSpacing),
+                    height: kBottomNavigationBarHeight + kLargeSpacing),
               ),
             ],
           ),
@@ -194,12 +140,12 @@ class ResultScreen extends ConsumerWidget {
 }
 
 class _CoverImage extends StatelessWidget {
+  final String? backDropPath;
+
   const _CoverImage({
     Key? key,
     this.backDropPath,
   }) : super(key: key);
-
-  final String? backDropPath;
 
   @override
   Widget build(BuildContext context) {
@@ -229,14 +175,15 @@ class _CoverImage extends StatelessWidget {
 }
 
 class _MovieImageDetails extends StatelessWidget {
+  final Movie movie;
+
+  final double movieHeight;
+
   const _MovieImageDetails({
     Key? key,
     required this.movie,
     required this.movieHeight,
   }) : super(key: key);
-
-  final Movie movie;
-  final double movieHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -268,13 +215,13 @@ class _MovieImageDetails extends StatelessWidget {
                   style: theme.textTheme.bodyText2,
                 ),
                 Text(
-                  movie.releaseDate.substring(0, 4),
+                  movie.releaseDate,
                   style: theme.textTheme.bodyText2,
                 ),
                 Row(
                   children: [
                     Text(
-                      movie.voteAverage.toStringAsFixed(1),
+                      movie.voteAverage,
                       style: theme.textTheme.bodyText2?.copyWith(
                         color:
                             theme.textTheme.bodyText2?.color?.withOpacity(0.65),
@@ -291,6 +238,168 @@ class _MovieImageDetails extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _Cast extends StatelessWidget {
+  final List<Cast> cast;
+
+  const _Cast({
+    Key? key,
+    required this.cast,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height / 4,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) => SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  cast[index].profilePath ?? '',
+                  errorBuilder: (context, e, s) => SizedBox(
+                    height: MediaQuery.of(context).size.height / 5,
+                    child: const Center(
+                      child: Align(
+                        child: Text('No preview found'),
+                        alignment: Alignment.centerLeft,
+                      ),
+                    ),
+                  ),
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height / 5,
+                  width: double.infinity,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  cast[index].name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyText2,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: kSmallSpacing),
+                  child: Text(
+                    cast[index].character,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: theme.textTheme.bodyText2?.copyWith(
+                      fontSize: theme.textTheme.bodySmall?.fontSize,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          separatorBuilder: (context, index) =>
+              const SizedBox(width: kSmallSpacing),
+          itemCount: cast.take(10).length,
+        ),
+      ),
+    );
+  }
+}
+
+class _RecommendedMovies extends StatelessWidget {
+  final List<Movie> recommendedMovies;
+
+  final WidgetRef ref;
+
+  const _RecommendedMovies({
+    Key? key,
+    required this.recommendedMovies,
+    required this.ref,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final call = ref.read(movieFlowControllerProvider.notifier);
+    final watch = ref.watch(movieFlowControllerProvider);
+    final theme = Theme.of(context);
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 150,
+        crossAxisSpacing: kSmallSpacing,
+        mainAxisSpacing: kSmallSpacing,
+        childAspectRatio: 9 / 16,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final recommendedMovie = recommendedMovies[index];
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                watch.scrollController?.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+                call.changeMovieFromRecommendations(recommendedMovie);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Image.network(
+                      recommendedMovie.posterPath ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    recommendedMovie.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyText2?.copyWith(
+                      fontSize: theme.textTheme.bodySmall?.fontSize,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 2,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          recommendedMovie.releaseDate,
+                          style: theme.textTheme.bodyText2?.copyWith(
+                            fontSize: theme.textTheme.bodySmall?.fontSize,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          recommendedMovie.voteAverage,
+                          style: theme.textTheme.bodyText2?.copyWith(
+                            fontSize: theme.textTheme.bodySmall?.fontSize,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.star_rounded,
+                          size: kMediumSpacing,
+                          color: Colors.amber,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        childCount: recommendedMovies.length,
       ),
     );
   }

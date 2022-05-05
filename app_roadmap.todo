@@ -1,8 +1,9 @@
 Todo:
     - [x] Add recommended movies under the movie in result screen
     - [x] Release app for testing
-    - [] Add trailers and cast section to result screen
+    - [x] Add cast section to result screen
     - [] Add cast on click to display actor movies
+    - [] Add trailers section to result screen
     - [] Make the return function in the result screen not return to genres but only the close/back
         button in the app bar
     - [] Add firebase integration for submitting bugs or feedback

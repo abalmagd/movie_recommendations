@@ -51,7 +51,7 @@ class YearsBackScreen extends ConsumerWidget {
           const Spacer(),
           Button(
             onPressed: () async {
-              await call.loadMovies();
+              await call.loadResults();
               Navigator.push(context, ResultScreen.route());
             },
             isLoading: watch.movie is AsyncLoading,
