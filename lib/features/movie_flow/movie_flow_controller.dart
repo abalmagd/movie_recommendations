@@ -82,14 +82,13 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
       scrollController: ScrollController(),
     );
 
-    final recommendedMovies =
-        _movieService.getRecommendedMovies(movie.id).then((recommendedMovies) {
+    _movieService.getRecommendedMovies(movie.id).then((recommendedMovies) {
       state = state.copyWith(
         recommendedMovies: AsyncValue.data(recommendedMovies),
       );
     });
 
-    final cast = _movieService.getMovieCast(movie.id).then((cast) {
+    _movieService.getMovieCast(movie.id).then((cast) {
       state = state.copyWith(
         cast: AsyncValue.data(cast),
       );

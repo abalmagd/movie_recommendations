@@ -200,7 +200,6 @@ class _ActorMovies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final call = ref.read(movieFlowControllerProvider.notifier);
-    final watch = ref.watch(movieFlowControllerProvider);
     final theme = Theme.of(context);
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
