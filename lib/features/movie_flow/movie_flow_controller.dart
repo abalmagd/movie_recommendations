@@ -14,6 +14,7 @@ final movieFlowControllerProvider =
         movie: AsyncValue.data(Movie.initial()),
         cast: const AsyncValue.data([]),
         genres: const AsyncValue.data([]),
+        actorMovies: const AsyncValue.data([]),
         recommendedMovies: const AsyncValue.data([]),
       ),
       ref.watch(movieServiceProvider),
@@ -47,6 +48,18 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     );
   }
 
+  void loadActorMovies(int personId) {
+    state = state.copyWith(
+      actorMovies: const AsyncValue.loading(),
+    );
+
+    _movieService.getActorMovies(personId).then(
+          (actorMovies) => state = state.copyWith(
+            actorMovies: AsyncValue.data(actorMovies),
+          ),
+        );
+  }
+
   Future<void> loadResults() async {
     state = state.copyWith(
       movie: const AsyncValue.loading(),
@@ -64,17 +77,23 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
       state.yearsBack,
     );
 
-    final recommendedMovies =
-        await _movieService.getRecommendedMovies(movie.id);
-
-    final cast = await _movieService.getMovieCast(movie.id);
-
     state = state.copyWith(
       movie: AsyncValue.data(movie),
       scrollController: ScrollController(),
-      recommendedMovies: AsyncValue.data(recommendedMovies),
-      cast: AsyncValue.data(cast),
     );
+
+    final recommendedMovies =
+        _movieService.getRecommendedMovies(movie.id).then((recommendedMovies) {
+      state = state.copyWith(
+        recommendedMovies: AsyncValue.data(recommendedMovies),
+      );
+    });
+
+    final cast = _movieService.getMovieCast(movie.id).then((cast) {
+      state = state.copyWith(
+        cast: AsyncValue.data(cast),
+      );
+    });
   }
 
   void changeMovieFromRecommendations(Movie movie) async {

@@ -15,6 +15,8 @@ abstract class MovieService {
   Future<List<Movie>> getRecommendedMovies(int movieId);
 
   Future<List<Cast>> getMovieCast(int movieId);
+
+  Future<List<Movie>> getActorMovies(int personId);
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {
@@ -94,5 +96,21 @@ class TMDBMovieService implements MovieService {
     // debugPrint(cast.take(10).toList().toString());
 
     // return cast.take(10).toList();
+  }
+
+  @override
+  Future<List<Movie>> getActorMovies(int personId) async {
+    final actorMovieEntities = await _movieRepository.getActorMovies(personId);
+
+    final actorMovies = actorMovieEntities
+        .map(
+          (e) => Movie.fromEntity(
+            e,
+            genres.where((element) => e.genreIds.contains(element.id)).toList(),
+          ),
+        )
+        .toList();
+
+    return actorMovies;
   }
 }

@@ -5,6 +5,7 @@ import 'package:movie_recommendations/core/widgets/button.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
+import 'package:movie_recommendations/features/movie_flow/result/person_result_screen.dart';
 
 import 'cast.dart';
 
@@ -243,7 +244,7 @@ class _MovieImageDetails extends StatelessWidget {
   }
 }
 
-class _Cast extends StatelessWidget {
+class _Cast extends ConsumerWidget {
   final List<Cast> cast;
 
   const _Cast({
@@ -252,7 +253,8 @@ class _Cast extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final call = ref.read(movieFlowControllerProvider.notifier);
     final theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: SizedBox(
@@ -263,44 +265,54 @@ class _Cast extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) => SizedBox(
             width: MediaQuery.of(context).size.width / 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.network(
-                  cast[index].profilePath ?? '',
-                  errorBuilder: (context, e, s) => SizedBox(
-                    height: MediaQuery.of(context).size.height / 5,
-                    child: const Center(
-                      child: Align(
-                        child: Text('No preview found'),
-                        alignment: Alignment.centerLeft,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  call.loadActorMovies(cast[index].id);
+                  Navigator.pushReplacement(
+                      context, PersonResultScreen.route(person: cast[index]));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      cast[index].profilePath ?? '',
+                      errorBuilder: (context, e, s) => SizedBox(
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: const Center(
+                          child: Align(
+                            child: Text('No preview found'),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                      ),
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height / 5,
+                      width: double.infinity,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      cast[index].name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyText2,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: kSmallSpacing),
+                      child: Text(
+                        cast[index].character,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: theme.textTheme.bodyText2?.copyWith(
+                          fontSize: theme.textTheme.bodySmall?.fontSize,
+                          color: theme.colorScheme.primary,
+                        ),
                       ),
                     ),
-                  ),
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height / 5,
-                  width: double.infinity,
+                  ],
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  cast[index].name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyText2,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: kSmallSpacing),
-                  child: Text(
-                    cast[index].character,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: theme.textTheme.bodyText2?.copyWith(
-                      fontSize: theme.textTheme.bodySmall?.fontSize,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           separatorBuilder: (context, index) =>
@@ -356,6 +368,12 @@ class _RecommendedMovies extends StatelessWidget {
                     child: Image.network(
                       recommendedMovie.posterPath ?? '',
                       fit: BoxFit.cover,
+                      errorBuilder: (context, e, s) => const Center(
+                        child: Align(
+                          child: Text('No preview found'),
+                          alignment: Alignment.centerLeft,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 2),

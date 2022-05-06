@@ -19,6 +19,8 @@ abstract class MovieRepository {
   Future<List<MovieEntity>> getRecommendedMovies(int movieId);
 
   Future<List<Cast>> getMovieCast(int movieId);
+
+  Future<List<MovieEntity>> getActorMovies(int personId);
 }
 
 final movieRepositoryProvider = Provider<MovieRepository>((ref) {
@@ -118,5 +120,19 @@ class TMDBMovieRepository implements MovieRepository {
     final cast = results.map((e) => Cast.fromMap(e)).toList();
 
     return cast;
+  }
+
+  @override
+  Future<List<MovieEntity>> getActorMovies(int personId) async {
+    final String actorMoviesEndpoint = '/person/$personId/movie_credits';
+
+    final response = await dio.get(actorMoviesEndpoint,
+        queryParameters: {'api_key': apiKey, 'language': 'en-US'});
+
+    final result = List<Map<String, dynamic>>.from(response.data['cast']);
+
+    final actorMovies = result.map((e) => MovieEntity.fromMap(e)).toList();
+
+    return actorMovies;
   }
 }

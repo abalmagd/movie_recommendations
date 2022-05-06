@@ -35,7 +35,7 @@ class Movie extends Equatable {
           ? entity.voteAverage.toStringAsFixed(0)
           : entity.voteAverage.toStringAsFixed(1),
       genres: genres,
-      releaseDate: entity.releaseDate.substring(0, 4),
+      releaseDate: entity.releaseDate,
       posterPath: 'https://image.tmdb.org/t/p/w500/${entity.posterPath}',
       backDropPath:
           'https://image.tmdb.org/t/p/original/${entity.backDropPath}',

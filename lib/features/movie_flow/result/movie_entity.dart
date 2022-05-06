@@ -25,7 +25,7 @@ class MovieEntity extends Equatable {
       voteAverage: map['vote_average'],
       // totalResults: map['total_results'],
       // totalPages: map['total_pages'],
-      releaseDate: map['release_date'],
+      releaseDate: map['release_date'] ?? 'Unknown',
       posterPath: map['poster_path'],
       backDropPath: map['backdrop_path'],
     );
