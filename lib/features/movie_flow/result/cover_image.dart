@@ -10,7 +10,7 @@ class CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    // final height = MediaQuery.of(context).size.height;
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 300, maxHeight: 300),
       child: ShaderMask(
