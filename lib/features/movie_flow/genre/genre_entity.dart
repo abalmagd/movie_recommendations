@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+/// The response will be mapped to [GenreEntity] then it will
+/// be modeled as [Genre]
 @immutable
 class GenreEntity extends Equatable {
   const GenreEntity({

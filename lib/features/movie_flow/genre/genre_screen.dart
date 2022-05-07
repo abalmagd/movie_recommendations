@@ -11,7 +11,6 @@ class GenreScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final watch = ref.watch(movieFlowControllerProvider);
     final call = ref.read(movieFlowControllerProvider.notifier);
     return Scaffold(
@@ -25,7 +24,7 @@ class GenreScreen extends ConsumerWidget {
         children: [
           Text(
             'Choose a genre!',
-            style: theme.textTheme.headline5,
+            style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.center,
           ),
           Expanded(
@@ -46,11 +45,7 @@ class GenreScreen extends ConsumerWidget {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, s) {
-                return Center(
-                  child: Text('Error => $e'),
-                );
-              },
+              error: (e, s) => Center(child: Text('Error => $e')),
             ),
           ),
           Button(
@@ -67,7 +62,7 @@ class GenreScreen extends ConsumerWidget {
                     ),
                     duration: Duration(milliseconds: 1500),
                     behavior: SnackBarBehavior.floating,
-                    dismissDirection: DismissDirection.none,
+                    dismissDirection: DismissDirection.horizontal,
                     padding: EdgeInsets.all(kLargeSpacing),
                   ),
                 );

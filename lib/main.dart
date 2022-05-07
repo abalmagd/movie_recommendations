@@ -6,9 +6,7 @@ import 'package:movie_recommendations/theme/custom_theme.dart';
 
 void main() {
   runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+    const ProviderScope(child: MyApp()),
   );
 }
 
@@ -19,7 +17,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final watch = ref.watch(movieFlowControllerProvider);
     return MaterialApp(
-      title: 'Movie Recommendations',
+      title: 'Movie Finder',
       debugShowCheckedModeBanner: false,
       theme: CustomTheme.lightTheme(context),
       themeMode: watch.themeMode ? ThemeMode.dark : ThemeMode.light,

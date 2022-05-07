@@ -9,21 +9,18 @@ class RatingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final call = ref.read(movieFlowControllerProvider.notifier);
     final watch = ref.watch(movieFlowControllerProvider);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: call.previousPage),
-        actions: [
-          ThemeIconButton(onPressed: call.changeTheme),
-        ],
+        actions: [ThemeIconButton(onPressed: call.changeTheme)],
       ),
       body: Column(
         children: [
           Text(
             'Select a minimum rating \nranging from 1-10',
-            style: theme.textTheme.headline5,
+            style: Theme.of(context).textTheme.headline5,
             textAlign: TextAlign.center,
           ),
           const Spacer(),
@@ -32,7 +29,7 @@ class RatingScreen extends ConsumerWidget {
             children: [
               Text(
                 '${watch.rating}',
-                style: theme.textTheme.headline2,
+                style: Theme.of(context).textTheme.headline2,
               ),
               const Icon(
                 Icons.star_rounded,

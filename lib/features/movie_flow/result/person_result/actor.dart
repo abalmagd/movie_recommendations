@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-class Cast extends Equatable {
-  const Cast({
+class Actor extends Equatable {
+  const Actor({
     required this.id,
     required this.name,
     required this.character,
@@ -11,15 +11,15 @@ class Cast extends Equatable {
     this.profilePath,
   });
 
-  const Cast.initial()
+  const Actor.initial()
       : id = 0,
         name = '',
         character = '',
         order = 0,
         profilePath = '';
 
-  factory Cast.fromMap(Map<String, dynamic> map) {
-    return Cast(
+  factory Actor.fromMap(Map<String, dynamic> map) {
+    return Actor(
       id: map['id'],
       name: map['name'],
       character: map['character'],
@@ -36,7 +36,7 @@ class Cast extends Equatable {
 
   @override
   String toString() => 'Cast(id: $id, name: $name, character: $character, '
-      'order: $order, profilePath: $profilePath,)';
+      'order: $order, profilePath: $profilePath)';
 
   @override
   List<Object?> get props => [id, name, character, order, profilePath];

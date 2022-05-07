@@ -7,11 +7,9 @@ class MovieEntity extends Equatable {
     required this.id,
     required this.title,
     required this.overview,
-    required this.releaseDate,
-    required this.genreIds,
     required this.voteAverage,
-    // required this.totalResults,
-    // required this.totalPages,
+    required this.genreIds,
+    required this.releaseDate,
     this.posterPath,
     this.backDropPath,
   });
@@ -23,42 +21,38 @@ class MovieEntity extends Equatable {
       overview: map['overview'],
       genreIds: List.from(map['genre_ids']),
       voteAverage: map['vote_average'],
-      // totalResults: map['total_results'],
-      // totalPages: map['total_pages'],
       releaseDate: map['release_date'] ?? 'Unknown',
       posterPath: map['poster_path'],
       backDropPath: map['backdrop_path'],
     );
   }
 
-  final String title;
   final int id;
+  final String title;
   final String overview;
+  final num voteAverage;
   final List<int> genreIds;
   final String releaseDate;
-  final num voteAverage;
-
-  // final int totalResults;
-  // final int totalPages;
   final String? posterPath;
   final String? backDropPath;
 
   @override
-  String toString() => 'MovieEntity(title: $title, overview: $overview, '
-      'releaseDate: $releaseDate, genres: ${genreIds.toString()}, '
-      'voteAverage: $voteAverage, totalResults: totalResults, '
-      'totalPages: totalPages)';
+  String toString() =>
+      'MovieEntity(id: $id, title: $title, overview: $overview, '
+      'voteAverage: $voteAverage, genres: ${genreIds.toString()}, '
+      'releaseDate: $releaseDate, posterPath: $posterPath, '
+      'backDropPath: $backDropPath)';
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
+        id,
         title,
         overview,
-        genreIds,
         voteAverage,
+        genreIds,
+        releaseDate,
         posterPath,
         backDropPath,
-        // Todo: Implement pagination after core app is finished
-        // totalResults,
-        // totalPages,
       ];
 }

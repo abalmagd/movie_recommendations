@@ -7,7 +7,7 @@ final dioProvider = Provider<Dio>(
   (ref) {
     return Dio(
       BaseOptions(
-        baseUrl: 'https://api.themoviedb.org/3/',
+        baseUrl: baseUrl,
         headers: {
           'Authorization': 'Bearer $v4AuthKey',
         },

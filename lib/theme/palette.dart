@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Color palette of the app for light/dark themes
 class Palette {
   // Dark theme palette
   static const almostBlack = Color(0xFF212121);

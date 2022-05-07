@@ -20,16 +20,11 @@ class Button extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(kMediumSpacing),
       child: TextButton(
-        style: TextButton.styleFrom(
-          minimumSize: Size(width, 52),
-        ),
+        style: TextButton.styleFrom(minimumSize: Size(width, 52)),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
-            : Text(
-                text,
-                style: Theme.of(context).textTheme.button,
-              ),
+            : Text(text, style: Theme.of(context).textTheme.button),
       ),
     );
   }

@@ -24,10 +24,7 @@ class ListCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(kSmallSpacing),
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: kMediumSpacing,
-              vertical: kSmallSpacing,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: kSmallSpacing),
             width: 140,
             child: Text(
               genre.name,

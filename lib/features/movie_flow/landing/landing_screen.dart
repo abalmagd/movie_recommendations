@@ -7,12 +7,7 @@ import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 
 class LandingScreen extends ConsumerWidget {
-  const LandingScreen({
-    Key? key,
-  }) : super(key: key);
-
-  final String landingImageBlue = movieNightBlue;
-  final String landingImageRed = movieNightRed;
+  const LandingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,12 +16,8 @@ class LandingScreen extends ConsumerWidget {
     final brightness = Theme.of(context).brightness;
     return Scaffold(
       appBar: AppBar(
-        leading: CloseButton(
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          ThemeIconButton(onPressed: call.changeTheme),
-        ],
+        leading: CloseButton(onPressed: () => Navigator.pop(context)),
+        actions: [ThemeIconButton(onPressed: call.changeTheme)],
       ),
       body: Column(
         children: [
@@ -37,9 +28,7 @@ class LandingScreen extends ConsumerWidget {
           ),
           Expanded(
             child: SvgPicture.asset(
-              brightness == Brightness.dark
-                  ? landingImageRed
-                  : landingImageBlue,
+              brightness == Brightness.dark ? movieNightRed : movieNightBlue,
             ),
           ),
           Button(
