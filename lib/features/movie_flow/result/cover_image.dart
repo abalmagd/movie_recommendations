@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CoverImage extends StatelessWidget {
-  final String? backDropPath;
-
   const CoverImage({
     Key? key,
     this.backDropPath,
   }) : super(key: key);
 
+  final String? backDropPath;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: height / 3),
+      constraints: const BoxConstraints(minHeight: 300, maxHeight: 300),
       child: ShaderMask(
         blendMode: BlendMode.dstIn,
         shaderCallback: (Rect bounds) {
@@ -28,6 +28,7 @@ class CoverImage extends StatelessWidget {
         child: Image.network(
           backDropPath ?? '',
           fit: BoxFit.cover,
+          width: double.infinity,
           errorBuilder: (context, e, s) => const Center(
             child: Text('No preview found'),
           ),

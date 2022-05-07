@@ -63,7 +63,7 @@ class PersonResultScreen extends ConsumerWidget {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: kSmallSpacing),
+              padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Actor Movies',
@@ -76,7 +76,10 @@ class PersonResultScreen extends ConsumerWidget {
               sliver: watch.actorMovies.when(
                 data: (actorMovies) {
                   if (actorMovies.isNotEmpty) {
-                    return OtherMovies(otherMovies: actorMovies);
+                    return OtherMovies(
+                      otherMovies: actorMovies,
+                      actorScreen: true,
+                    );
                   }
                   return const SliverToBoxAdapter(
                     child: Center(
@@ -107,15 +110,14 @@ class PersonResultScreen extends ConsumerWidget {
 }
 
 class _ActorPosterDetails extends StatelessWidget {
-  final Actor person;
-
-  final double posterHeight;
-
   const _ActorPosterDetails({
     Key? key,
     required this.person,
     required this.posterHeight,
   }) : super(key: key);
+
+  final Actor person;
+  final double posterHeight;
 
   @override
   Widget build(BuildContext context) {

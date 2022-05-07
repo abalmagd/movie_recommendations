@@ -10,6 +10,7 @@ class PosterDetails extends StatelessWidget {
   }) : super(key: key);
 
   final Movie movie;
+  // final Actor actor;
   final double posterHeight;
 
   @override

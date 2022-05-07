@@ -162,7 +162,7 @@ class _Cast extends ConsumerWidget {
     final theme = Theme.of(context);
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height / 5,
+        height: MediaQuery.of(context).size.height / 4,
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
           scrollDirection: Axis.horizontal,

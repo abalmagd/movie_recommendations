@@ -3,14 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
+import 'package:movie_recommendations/features/movie_flow/result/result_screen.dart';
 
 class OtherMovies extends ConsumerWidget {
-  final List<Movie> otherMovies;
-
   const OtherMovies({
     Key? key,
     required this.otherMovies,
+    this.actorScreen = false,
   }) : super(key: key);
+
+  final List<Movie> otherMovies;
+  final bool actorScreen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,12 +34,16 @@ class OtherMovies extends ConsumerWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                watch.scrollController?.animateTo(
-                  0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
                 call.changeMovieFromRecommendations(movie);
+                if (!actorScreen) {
+                  watch.scrollController?.animateTo(
+                    0,
+                    duration: const Duration(milliseconds: 1000),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                } else {
+                  Navigator.pushReplacement(context, ResultScreen.route());
+                }
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
