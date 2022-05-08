@@ -6,21 +6,22 @@ import 'package:movie_recommendations/core/network/dio.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre_entity.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie_entity.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/actor.dart';
+import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 
 abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
 
-  Future<List<MovieEntity>> getMovie(
-    double rating,
-    String date,
-    String genreIds,
-  );
+  Future<List<MovieEntity>> getMovie(double rating,
+      String date,
+      String genreIds,);
 
   Future<List<MovieEntity>> getRecommendedMovies(int movieId);
 
   Future<List<Actor>> getMovieCast(int movieId);
 
   Future<List<MovieEntity>> getActorMovies(int personId);
+
+  Future<List<Trailer>> getMovieTrailers(int movieId);
 }
 
 final movieRepositoryProvider = Provider<MovieRepository>((ref) {
@@ -139,5 +140,11 @@ class TMDBMovieRepository implements MovieRepository {
     final actorMovies = result.map((e) => MovieEntity.fromMap(e)).toList();
 
     return actorMovies;
+  }
+
+  @override
+  Future<List<Trailer>> getMovieTrailers(int movieId) {
+    // TODO: implement getMovieTrailers
+    throw UnimplementedError();
   }
 }
