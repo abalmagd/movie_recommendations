@@ -25,6 +25,7 @@ class PersonResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {});
     final call = ref.read(movieFlowControllerProvider.notifier);
     final watch = ref.watch(movieFlowControllerProvider);
     final theme = Theme.of(context);
@@ -97,9 +98,11 @@ class PersonResultScreen extends ConsumerWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            watch.scrollController?.animateTo(0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease);
+            watch.scrollController?.animateTo(
+              0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.ease,
+            );
           },
           child: const Icon(Icons.arrow_upward),
           backgroundColor: Theme.of(context).colorScheme.primary,
