@@ -126,8 +126,13 @@ class TMDBMovieRepository implements MovieRepository {
   Future<List<MovieEntity>> getActorMovies(int personId) async {
     final String actorMoviesEndpoint = '/person/$personId/movie_credits';
 
-    final response = await dio.get(actorMoviesEndpoint,
-        queryParameters: {'api_key': apiKey, 'language': 'en-US'});
+    final response = await dio.get(
+      actorMoviesEndpoint,
+      queryParameters: {
+        'api_key': apiKey,
+        'language': 'en-US',
+      },
+    );
 
     final result = List<Map<String, dynamic>>.from(response.data['cast']);
 

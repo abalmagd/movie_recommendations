@@ -17,7 +17,7 @@ class MovieFlowState extends Equatable {
     required this.movie,
     required this.actorMovies,
     required this.cast,
-    required this.recommendedMovies,
+    required this.otherMovies,
   });
 
   final PageController pageController;
@@ -28,14 +28,14 @@ class MovieFlowState extends Equatable {
   final int yearsBack;
   final AsyncValue<List<Genre>> genres;
   final AsyncValue<Movie> movie;
-  final AsyncValue<List<Movie>> recommendedMovies;
+  final AsyncValue<List<Movie>> otherMovies;
   final bool themeMode;
 
   MovieFlowState copyWith({
     PageController? pageController,
     ScrollController? scrollController,
     AsyncValue<List<Movie>>? actorMovies,
-    AsyncValue<List<Movie>>? recommendedMovies,
+    AsyncValue<List<Movie>>? otherMovies,
     int? rating,
     bool? themeMode,
     int? yearsBack,
@@ -46,7 +46,7 @@ class MovieFlowState extends Equatable {
     return MovieFlowState(
       pageController: pageController ?? this.pageController,
       scrollController: scrollController ?? this.scrollController,
-      recommendedMovies: recommendedMovies ?? this.recommendedMovies,
+      otherMovies: otherMovies ?? this.otherMovies,
       actorMovies: actorMovies ?? this.actorMovies,
       rating: rating ?? this.rating,
       cast: cast ?? this.cast,
@@ -60,7 +60,7 @@ class MovieFlowState extends Equatable {
   @override
   List<Object?> get props =>
       [
-        recommendedMovies,
+        otherMovies,
         pageController,
         scrollController,
         actorMovies,

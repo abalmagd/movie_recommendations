@@ -99,7 +99,7 @@ class ResultScreen extends ConsumerWidget {
               ),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
-                sliver: watch.recommendedMovies.when(
+                sliver: watch.otherMovies.when(
                   data: (recommendedMovies) {
                     if (recommendedMovies.isNotEmpty) {
                       return OtherMovies(otherMovies: recommendedMovies);

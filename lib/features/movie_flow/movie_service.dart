@@ -91,11 +91,6 @@ class TMDBMovieService implements MovieService {
   @override
   Future<List<Actor>> getMovieCast(int movieId) async {
     return await _movieRepository.getMovieCast(movieId);
-    // final cast = await _movieRepository.getMovieCast(movieId);
-
-    // debugPrint(cast.take(10).toList().toString());
-
-    // return cast.take(10).toList();
   }
 
   @override
