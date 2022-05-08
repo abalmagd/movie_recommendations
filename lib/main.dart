@@ -20,7 +20,7 @@ class MyApp extends ConsumerWidget {
       title: 'Movie Finder',
       debugShowCheckedModeBanner: false,
       theme: CustomTheme.lightTheme(context),
-      themeMode: watch.themeMode ? ThemeMode.dark : ThemeMode.light,
+      themeMode: watch.themeMode,
       darkTheme: CustomTheme.darkTheme(context),
       home: const MovieFlow(),
     );

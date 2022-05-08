@@ -16,7 +16,7 @@ class YearsBackScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: call.previousPage),
-        actions: [ThemeIconButton(onPressed: call.changeTheme)],
+        actions: [ThemeIconButton(onPressed: () => call.changeTheme(context))],
       ),
       body: Column(
         children: [

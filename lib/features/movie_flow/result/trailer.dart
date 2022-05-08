@@ -7,6 +7,7 @@ class Trailer extends Equatable {
     required this.key,
     required this.official,
     required this.site,
+    required this.type,
   });
 
   factory Trailer.fromMap(Map<String, dynamic> map) {
@@ -14,14 +15,16 @@ class Trailer extends Equatable {
       key: map['key'],
       official: map['official'],
       site: map['site'],
+      type: map['type'],
     );
   }
 
   final String key;
   final bool official;
   final String site;
+  final String type;
 
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [key, official, site, type];
 }

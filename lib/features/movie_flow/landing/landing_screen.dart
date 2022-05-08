@@ -17,7 +17,7 @@ class LandingScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: CloseButton(onPressed: () => Navigator.pop(context)),
-        actions: [ThemeIconButton(onPressed: call.changeTheme)],
+        actions: [ThemeIconButton(onPressed: () => call.changeTheme(context))],
       ),
       body: Column(
         children: [

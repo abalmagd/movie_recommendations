@@ -4,10 +4,10 @@ import 'package:movie_recommendations/core/constants.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
-import 'package:movie_recommendations/features/movie_flow/result/cover_image.dart';
-import 'package:movie_recommendations/features/movie_flow/result/other_movies.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/person_result_screen.dart';
-import 'package:movie_recommendations/features/movie_flow/result/poster_image_details.dart';
+import 'package:movie_recommendations/features/movie_flow/result/widgets/cover_image.dart';
+import 'package:movie_recommendations/features/movie_flow/result/widgets/other_movies.dart';
+import 'package:movie_recommendations/features/movie_flow/result/widgets/poster_image_details.dart';
 
 import 'person_result/actor.dart';
 
@@ -31,7 +31,7 @@ class ResultScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            ThemeIconButton(onPressed: call.changeTheme),
+            ThemeIconButton(onPressed: () => call.changeTheme(context)),
           ],
         ),
         body: watch.movie.when(

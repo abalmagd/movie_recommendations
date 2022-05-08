@@ -5,6 +5,7 @@ import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_repository.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/actor.dart';
+import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 
 abstract class MovieService {
   Future<List<Genre>> getGenres();
@@ -17,6 +18,8 @@ abstract class MovieService {
   Future<List<Actor>> getMovieCast(int movieId);
 
   Future<List<Movie>> getActorMovies(int personId);
+
+  Future<List<Trailer>> getMovieTrailers(int movieId);
 }
 
 final movieServiceProvider = Provider<MovieService>((ref) {
@@ -107,5 +110,10 @@ class TMDBMovieService implements MovieService {
         .toList();
 
     return actorMovies;
+  }
+
+  @override
+  Future<List<Trailer>> getMovieTrailers(int movieId) async {
+    return await _movieRepository.getMovieTrailers(movieId);
   }
 }

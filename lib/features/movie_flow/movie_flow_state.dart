@@ -12,7 +12,7 @@ class MovieFlowState extends Equatable {
     this.scrollController,
     this.rating = 5,
     this.yearsBack = 10,
-    this.themeMode = false,
+    this.themeMode = ThemeMode.system,
     required this.genres,
     required this.movie,
     required this.actorMovies,
@@ -29,7 +29,7 @@ class MovieFlowState extends Equatable {
   final AsyncValue<List<Genre>> genres;
   final AsyncValue<Movie> movie;
   final AsyncValue<List<Movie>> otherMovies;
-  final bool themeMode;
+  final ThemeMode themeMode;
 
   MovieFlowState copyWith({
     PageController? pageController,
@@ -37,7 +37,7 @@ class MovieFlowState extends Equatable {
     AsyncValue<List<Movie>>? actorMovies,
     AsyncValue<List<Movie>>? otherMovies,
     int? rating,
-    bool? themeMode,
+    ThemeMode? themeMode,
     int? yearsBack,
     AsyncValue<List<Genre>>? genres,
     AsyncValue<List<Actor>>? cast,

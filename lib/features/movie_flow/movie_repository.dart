@@ -11,9 +11,11 @@ import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
 
-  Future<List<MovieEntity>> getMovie(double rating,
-      String date,
-      String genreIds,);
+  Future<List<MovieEntity>> getMovie(
+    double rating,
+    String date,
+    String genreIds,
+  );
 
   Future<List<MovieEntity>> getRecommendedMovies(int movieId);
 
@@ -143,8 +145,20 @@ class TMDBMovieRepository implements MovieRepository {
   }
 
   @override
-  Future<List<Trailer>> getMovieTrailers(int movieId) {
-    // TODO: implement getMovieTrailers
-    throw UnimplementedError();
+  Future<List<Trailer>> getMovieTrailers(int movieId) async {
+    final String getVideosEndpoint = '/movie/$movieId/videos';
+
+    final response = await dio.get(
+      getVideosEndpoint,
+      queryParameters: {
+        'api_key': apiKey,
+        'language': 'en-Us',
+      },
+    );
+
+    final result = List<Map<String, dynamic>>.from(response.data['results']);
+    final videos = result.map((e) => Trailer.fromMap(e)).toList();
+
+    return videos;
   }
 }

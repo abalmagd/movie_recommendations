@@ -121,10 +121,52 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     loadCast(movie);
   }
 
-  void changeTheme() async {
-    state = state.copyWith(
-      themeMode: !state.themeMode,
-    );
+  void changeTheme(BuildContext context) async {
+    switch (state.themeMode) {
+      case ThemeMode.system:
+        if (MediaQuery.of(context).platformBrightness == Brightness.light) {
+          state = state.copyWith(
+            themeMode: ThemeMode.dark,
+          );
+        } else {
+          state = state.copyWith(
+            themeMode: ThemeMode.light,
+          );
+        }
+        break;
+      case ThemeMode.light:
+        state = state.copyWith(
+          themeMode: ThemeMode.dark,
+        );
+        break;
+      case ThemeMode.dark:
+        state = state.copyWith(
+          themeMode: ThemeMode.light,
+        );
+        break;
+    }
+
+    /*if (state.themeMode == null) {
+      if (ThemeMode.system == Brightness.dark) {
+        state = state.copyWith(
+          themeMode: ThemeMode.light,
+        );
+      } else {
+        state = state.copyWith(
+          themeMode: ThemeMode.dark,
+        );
+      }
+    } else {
+      if (state.themeMode == ThemeMode.dark) {
+        state = state.copyWith(
+          themeMode: ThemeMode.light,
+        );
+      } else {
+        state = state.copyWith(
+          themeMode: ThemeMode.dark,
+        );
+      }
+    }*/
   }
 
   void toggleSelectedGenre(Genre genre) {

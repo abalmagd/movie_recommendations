@@ -17,7 +17,7 @@ class GenreScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: BackButton(onPressed: call.previousPage),
         actions: [
-          ThemeIconButton(onPressed: call.changeTheme),
+          ThemeIconButton(onPressed: () => call.changeTheme(context)),
         ],
       ),
       body: Column(
