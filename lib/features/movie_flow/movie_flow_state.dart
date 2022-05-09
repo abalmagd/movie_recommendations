@@ -9,71 +9,72 @@ import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 @immutable
 class MovieFlowState extends Equatable {
   const MovieFlowState({
+    this.themeMode = ThemeMode.system,
     required this.pageController,
-    this.scrollController,
+    required this.genres,
     this.rating = 5,
     this.yearsBack = 10,
-    this.themeMode = ThemeMode.system,
-    required this.genres,
+    this.scrollController,
     required this.movie,
-    required this.actorMovies,
     required this.movieVideos,
     required this.cast,
     required this.otherMovies,
+    required this.actorMovies,
   });
 
-  final PageController pageController;
-  final AsyncValue<List<Trailer>> movieVideos;
-  final ScrollController? scrollController;
-  final int rating;
-  final AsyncValue<List<Actor>> cast;
-  final AsyncValue<List<Movie>> actorMovies;
-  final int yearsBack;
-  final AsyncValue<List<Genre>> genres;
-  final AsyncValue<Movie> movie;
-  final AsyncValue<List<Movie>> otherMovies;
   final ThemeMode themeMode;
+  final PageController pageController;
+  final AsyncValue<List<Genre>> genres;
+  final int rating;
+  final int yearsBack;
+  final ScrollController? scrollController;
+  final AsyncValue<Movie> movie;
+  final AsyncValue<List<Trailer>> movieVideos;
+  final AsyncValue<List<Actor>> cast;
+  final AsyncValue<List<Movie>> otherMovies;
+  final AsyncValue<List<Movie>> actorMovies;
 
   MovieFlowState copyWith({
-    PageController? pageController,
-    ScrollController? scrollController,
-    AsyncValue<List<Movie>>? actorMovies,
-    AsyncValue<List<Movie>>? otherMovies,
-    AsyncValue<List<Trailer>>? movieVideos,
-    int? rating,
     ThemeMode? themeMode,
-    int? yearsBack,
+    PageController? pageController,
     AsyncValue<List<Genre>>? genres,
-    AsyncValue<List<Actor>>? cast,
+    int? rating,
+    int? yearsBack,
+    ScrollController? scrollController,
     AsyncValue<Movie>? movie,
+    AsyncValue<List<Trailer>>? movieVideos,
+    AsyncValue<List<Actor>>? cast,
+    AsyncValue<List<Movie>>? otherMovies,
+    AsyncValue<List<Movie>>? actorMovies,
   }) {
     return MovieFlowState(
-      pageController: pageController ?? this.pageController,
-      scrollController: scrollController ?? this.scrollController,
-      otherMovies: otherMovies ?? this.otherMovies,
-      actorMovies: actorMovies ?? this.actorMovies,
-      rating: rating ?? this.rating,
-      cast: cast ?? this.cast,
       themeMode: themeMode ?? this.themeMode,
-      yearsBack: yearsBack ?? this.yearsBack,
+      pageController: pageController ?? this.pageController,
       genres: genres ?? this.genres,
+      rating: rating ?? this.rating,
+      yearsBack: yearsBack ?? this.yearsBack,
+      scrollController: scrollController ?? this.scrollController,
       movie: movie ?? this.movie,
       movieVideos: movieVideos ?? this.movieVideos,
+      cast: cast ?? this.cast,
+      otherMovies: otherMovies ?? this.otherMovies,
+      actorMovies: actorMovies ?? this.actorMovies,
     );
   }
 
   @override
-  List<Object?> get props => [
-        movieVideos,
-        otherMovies,
+  List<Object?> get props =>
+      [
+        themeMode,
         pageController,
-        scrollController,
-        actorMovies,
+        genres,
         rating,
         yearsBack,
-        genres,
+        scrollController,
         movie,
-        themeMode,
+        movieVideos,
         cast,
+        otherMovies,
+        actorMovies,
       ];
 }
