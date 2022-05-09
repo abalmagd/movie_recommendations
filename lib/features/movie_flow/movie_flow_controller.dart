@@ -123,7 +123,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
     loadRecommendedMovies(movie);
 
-    // loadMovieVideos(movie.id);
+    loadMovieVideos(movie.id);
   }
 
   void changeMovieFromRecommendations(Movie movie) async {
@@ -137,7 +137,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
     loadCast(movie);
 
-    // loadMovieVideos(movie.id);
+    loadMovieVideos(movie.id);
   }
 
   void changeTheme(BuildContext context) async {

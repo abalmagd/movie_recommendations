@@ -34,7 +34,6 @@ dependencies:
   riverpod: ^1.0.3
   dio: ^4.0.6
   flutter_svg: ^1.0.3
-  youtube_player_flutter: ^8.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

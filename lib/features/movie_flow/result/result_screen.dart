@@ -6,6 +6,7 @@ import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/person_result_screen.dart';
 import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
+import 'package:movie_recommendations/features/movie_flow/result/video_player_screen.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/cover_image.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/other_movies.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/poster_image_details.dart';
@@ -171,20 +172,49 @@ class _Trailers extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height / 8,
+        height: 125,
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return const SizedBox(
-              width: 150,
-              child: Placeholder(),
+            final video = videos[index];
+            return SizedBox(
+              width: (125 * 16) / 9,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        const VideoPlayerScreen(),
+                  );
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.network(
+                      'https://i3.ytimg.com/vi/${video.key}/mqdefault.jpg',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, e, s) => const Center(
+                        child: Align(
+                          child: Text('No preview found'),
+                          alignment: Alignment.centerLeft,
+                        ),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.play_arrow,
+                      size: 52,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
             );
           },
           separatorBuilder: (context, index) =>
               const SizedBox(width: kSmallSpacing),
-          itemCount: videos.take(1).length,
+          itemCount: videos.take(5).length,
         ),
       ),
     );
