@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/actor.dart';
+import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 
 @immutable
 class MovieFlowState extends Equatable {
@@ -16,11 +17,13 @@ class MovieFlowState extends Equatable {
     required this.genres,
     required this.movie,
     required this.actorMovies,
+    required this.movieVideos,
     required this.cast,
     required this.otherMovies,
   });
 
   final PageController pageController;
+  final AsyncValue<List<Trailer>> movieVideos;
   final ScrollController? scrollController;
   final int rating;
   final AsyncValue<List<Actor>> cast;
@@ -36,6 +39,7 @@ class MovieFlowState extends Equatable {
     ScrollController? scrollController,
     AsyncValue<List<Movie>>? actorMovies,
     AsyncValue<List<Movie>>? otherMovies,
+    AsyncValue<List<Trailer>>? movieVideos,
     int? rating,
     ThemeMode? themeMode,
     int? yearsBack,
@@ -54,12 +58,13 @@ class MovieFlowState extends Equatable {
       yearsBack: yearsBack ?? this.yearsBack,
       genres: genres ?? this.genres,
       movie: movie ?? this.movie,
+      movieVideos: movieVideos ?? this.movieVideos,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
+        movieVideos,
         otherMovies,
         pageController,
         scrollController,

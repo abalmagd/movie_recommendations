@@ -5,6 +5,7 @@ import 'package:movie_recommendations/core/widgets/button.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/person_result_screen.dart';
+import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/cover_image.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/other_movies.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/poster_image_details.dart';
@@ -67,6 +68,25 @@ class ResultScreen extends ConsumerWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(kMediumSpacing),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'Videos',
+                    style: theme.textTheme.headline6,
+                  ),
+                ),
+              ),
+              watch.movieVideos.when(
+                data: (videos) => _Trailers(videos: videos),
+                error: (e, s) => Text(e.toString()),
+                loading: () => const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 185,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
                 ),
               ),
               SliverPadding(
@@ -140,11 +160,34 @@ class ResultScreen extends ConsumerWidget {
 }
 
 class _Trailers extends StatelessWidget {
-  const _Trailers({Key? key}) : super(key: key);
+  const _Trailers({
+    Key? key,
+    required this.videos,
+  }) : super(key: key);
+
+  final List<Trailer> videos;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height / 8,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: kMediumSpacing),
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return const SizedBox(
+              width: 150,
+              child: Placeholder(),
+            );
+          },
+          separatorBuilder: (context, index) =>
+              const SizedBox(width: kSmallSpacing),
+          itemCount: videos.take(1).length,
+        ),
+      ),
+    );
   }
 }
 

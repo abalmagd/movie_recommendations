@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
@@ -6,13 +7,14 @@ import 'package:movie_recommendations/features/movie_flow/movie_service.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 
 final movieFlowControllerProvider =
-    StateNotifierProvider.autoDispose<MovieFlowController, MovieFlowState>(
-  (ref) {
+StateNotifierProvider.autoDispose<MovieFlowController, MovieFlowState>(
+      (ref) {
     return MovieFlowController(
       MovieFlowState(
         pageController: PageController(),
         genres: const AsyncValue.data([]),
         movie: AsyncValue.data(Movie.initial()),
+        movieVideos: const AsyncValue.data([]),
         otherMovies: const AsyncValue.data([]),
         cast: const AsyncValue.data([]),
         actorMovies: const AsyncValue.data([]),
@@ -95,6 +97,19 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
         );
   }
 
+  void loadMovieVideos(int movieId) async {
+    state = state.copyWith(
+      movieVideos: const AsyncValue.loading(),
+    );
+
+    _movieService.getMovieTrailers(movieId).then((videos) {
+      state = state.copyWith(
+        movieVideos: AsyncValue.data(videos),
+      );
+      debugPrint(videos.toString());
+    });
+  }
+
   Future<void> loadResults() async {
     state = state.copyWith(
       movie: const AsyncValue.loading(),
@@ -107,6 +122,8 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     loadCast(movie);
 
     loadRecommendedMovies(movie);
+
+    // loadMovieVideos(movie.id);
   }
 
   void changeMovieFromRecommendations(Movie movie) async {
@@ -119,6 +136,8 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     loadRecommendedMovies(movie);
 
     loadCast(movie);
+
+    // loadMovieVideos(movie.id);
   }
 
   void changeTheme(BuildContext context) async {
