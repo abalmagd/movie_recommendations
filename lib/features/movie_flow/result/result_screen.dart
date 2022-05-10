@@ -186,7 +186,7 @@ class _Trailers extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) =>
-                        const VideoPlayerScreen(),
+                        VideoPlayerScreen(videoId: video.key),
                   );
                 },
                 child: Stack(
