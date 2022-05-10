@@ -26,6 +26,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(
         hideThumbnail: true,
+        disableDragSeek: true,
         useHybridComposition: false,
       ),
     );
@@ -42,7 +43,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop();
-        // _controller.toggleFullScreenMode();
         return true;
       },
       child: GestureDetector(
@@ -56,6 +56,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             padding: const EdgeInsets.symmetric(horizontal: kLargeSpacing),
             child: Center(
               child: YoutubePlayer(
+                bottomActions: null,
+                showVideoProgressIndicator: false,
                 controller: _controller,
                 bufferIndicator: const CircularProgressIndicator(),
                 progressColors: ProgressBarColors(
