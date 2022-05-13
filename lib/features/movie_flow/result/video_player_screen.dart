@@ -18,22 +18,24 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late final YoutubePlayerController _controller;
 
+  void listener() {}
+
   @override
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(
-        forceHD: true,
         hideThumbnail: true,
-        disableDragSeek: true,
-        useHybridComposition: false,
+        // hideControls: true,
+        useHybridComposition: true,
       ),
     );
   }
 
   @override
   void dispose() {
+    _controller.removeListener(listener);
     _controller.dispose();
     super.dispose();
   }
@@ -52,23 +54,24 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       },
       child: GestureDetector(
         onTap: () => Navigator.pop(context),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 5.0,
-            sigmaY: 5.0,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          extendBody: true,
+          backgroundColor: Colors.transparent,
+          body: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 3.0,
+              sigmaY: 3.0,
+            ),
             child: Center(
               child: YoutubePlayer(
-                bottomActions: null,
-                showVideoProgressIndicator: false,
                 controller: _controller,
-                bufferIndicator: const CircularProgressIndicator(),
+                bottomActions: [],
                 progressColors: ProgressBarColors(
                   playedColor: Theme.of(context).colorScheme.primary,
                   handleColor: Colors.white,
                 ),
+                showVideoProgressIndicator: true,
                 onEnded: (_) => Navigator.of(context).pop(),
               ),
             ),

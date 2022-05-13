@@ -3,10 +3,7 @@ Todo:
     - [x] Release app for testing
     - [x] Add cast section to result screen
     - [x] Add cast on click to display actor movies
-    - [] Add trailers section to result screen
+    - [x] Add trailers section to result screen
     - [] Add firebase integration for submitting bugs or feedback
-    - [] Implement saving favorite, watch later, and watched movies
-    - [] Separate state and controller for adding favorites, watch later, and watched movies
     - [] Make the return function in the result screen not return to genres but only the close/back
         button in the app bar
-    - [] (optional) Make theme change dynamically based on movie poster dominant colors
