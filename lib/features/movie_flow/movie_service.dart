@@ -114,6 +114,10 @@ class TMDBMovieService implements MovieService {
 
   @override
   Future<List<Trailer>> getMovieTrailers(int movieId) async {
-    return await _movieRepository.getMovieTrailers(movieId);
+    final videos = await _movieRepository.getMovieTrailers(movieId);
+    final trailers =
+        videos.where((e) => (e.type == 'Trailer' && e.official)).toList();
+
+    return trailers;
   }
 }

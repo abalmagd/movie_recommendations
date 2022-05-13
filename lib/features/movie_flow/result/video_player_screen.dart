@@ -44,9 +44,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       onWillPop: () async {
         if (_controller.value.isFullScreen) {
           _controller.toggleFullScreenMode();
+          return false;
+        } else {
+          Navigator.pop(context);
+          return true;
         }
-        Navigator.of(context).pop();
-        return true;
       },
       child: GestureDetector(
         onTap: () => Navigator.pop(context),

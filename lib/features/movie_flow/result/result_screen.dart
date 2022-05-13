@@ -75,13 +75,21 @@ class ResultScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(kMediumSpacing),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    'Videos',
+                    'Trailers',
                     style: theme.textTheme.headline6,
                   ),
                 ),
               ),
               watch.movieVideos.when(
-                data: (videos) => _Trailers(videos: videos),
+                data: (videos) {
+                  return videos.isEmpty
+                      ? const SliverToBoxAdapter(
+                          child: Center(
+                            child: Text('No trailers are found'),
+                          ),
+                        )
+                      : _Trailers(videos: videos);
+                },
                 error: (e, s) => Text(e.toString()),
                 loading: () => const SliverToBoxAdapter(
                   child: SizedBox(
