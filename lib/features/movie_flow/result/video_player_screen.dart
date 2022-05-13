@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:movie_recommendations/core/constants.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
@@ -25,6 +24,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(
+        forceHD: true,
         hideThumbnail: true,
         disableDragSeek: true,
         useHybridComposition: false,
@@ -42,6 +42,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if (_controller.value.isFullScreen) {
+          _controller.toggleFullScreenMode();
+        }
         Navigator.of(context).pop();
         return true;
       },
@@ -53,7 +56,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             sigmaY: 5.0,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kLargeSpacing),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             child: Center(
               child: YoutubePlayer(
                 bottomActions: null,
@@ -64,7 +67,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   playedColor: Theme.of(context).colorScheme.primary,
                   handleColor: Colors.white,
                 ),
-                onReady: () {},
+                onEnded: (_) => Navigator.of(context).pop(),
               ),
             ),
           ),
