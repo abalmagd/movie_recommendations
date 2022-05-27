@@ -52,28 +52,44 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           return true;
         }
       },
-      child: GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          extendBody: true,
-          backgroundColor: Colors.transparent,
-          body: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 3.0,
-              sigmaY: 3.0,
-            ),
-            child: Center(
-              child: YoutubePlayer(
-                controller: _controller,
-                bottomActions: [],
-                progressColors: ProgressBarColors(
-                  playedColor: Theme.of(context).colorScheme.primary,
-                  handleColor: Colors.white,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 3.0,
+            sigmaY: 3.0,
+          ),
+          child: Center(
+            child: YoutubePlayer(
+              controller: _controller,
+              topActions: [
+                BackButton(
+                  onPressed: () => Navigator.pop(context),
+                  color: Colors.white,
                 ),
-                showVideoProgressIndicator: true,
-                onEnded: (_) => Navigator.of(context).pop(),
+              ],
+              bottomActions: [
+                const SizedBox(width: 14.0),
+                CurrentPosition(),
+                const SizedBox(width: 8.0),
+                ProgressBar(
+                  isExpanded: true,
+                  colors: ProgressBarColors(
+                    playedColor: Theme.of(context).colorScheme.primary,
+                    handleColor: Colors.white,
+                  ),
+                ),
+                RemainingDuration(),
+                FullScreenButton(),
+              ],
+              progressColors: ProgressBarColors(
+                playedColor: Theme.of(context).colorScheme.primary,
+                handleColor: Colors.white,
               ),
+              showVideoProgressIndicator: true,
+              onEnded: (_) => Navigator.of(context).pop(),
             ),
           ),
         ),
