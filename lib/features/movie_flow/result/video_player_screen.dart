@@ -27,6 +27,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(
         hideThumbnail: true,
+        disableDragSeek: true,
         // hideControls: true,
         useHybridComposition: true,
       ),
@@ -42,55 +43,43 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_controller.value.isFullScreen) {
-          _controller.toggleFullScreenMode();
-          return false;
-        } else {
-          Navigator.pop(context);
-          return true;
-        }
-      },
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        extendBody: true,
-        backgroundColor: Colors.transparent,
-        body: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 3.0,
-            sigmaY: 3.0,
-          ),
-          child: Center(
-            child: YoutubePlayer(
-              controller: _controller,
-              topActions: [
-                BackButton(
-                  onPressed: () => Navigator.pop(context),
-                  color: Colors.white,
-                ),
-              ],
-              bottomActions: [
-                const SizedBox(width: 14.0),
-                CurrentPosition(),
-                const SizedBox(width: 8.0),
-                ProgressBar(
-                  isExpanded: true,
-                  colors: ProgressBarColors(
-                    playedColor: Theme.of(context).colorScheme.primary,
-                    handleColor: Colors.white,
-                  ),
-                ),
-                RemainingDuration(),
-                FullScreenButton(),
-              ],
-              progressColors: ProgressBarColors(
-                playedColor: Theme.of(context).colorScheme.primary,
-                handleColor: Colors.white,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      backgroundColor: Colors.transparent,
+      body: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 3.0,
+          sigmaY: 3.0,
+        ),
+        child: Center(
+          child: YoutubePlayer(
+            controller: _controller,
+            topActions: [
+              BackButton(
+                onPressed: () {
+                  if (_controller.value.isFullScreen) {
+                    _controller.toggleFullScreenMode();
+                  }
+                  Navigator.pop(context);
+                },
+                color: Colors.white,
               ),
-              showVideoProgressIndicator: true,
-              onEnded: (_) => Navigator.of(context).pop(),
-            ),
+            ],
+            bottomActions: [
+              const SizedBox(width: 14.0),
+              CurrentPosition(),
+              const SizedBox(width: 8.0),
+              ProgressBar(
+                isExpanded: true,
+                colors: ProgressBarColors(
+                  playedColor: Theme.of(context).colorScheme.primary,
+                  handleColor: Colors.white,
+                ),
+              ),
+              RemainingDuration(),
+            ],
+            showVideoProgressIndicator: true,
           ),
         ),
       ),
