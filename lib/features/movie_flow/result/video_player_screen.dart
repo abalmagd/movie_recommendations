@@ -50,11 +50,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         ),
         child: Center(
           child: YoutubePlayerControllerProvider(
-            // Provides controller to all the widget below it.
             controller: _controller,
             child: YoutubePlayerIFrame(
-              aspectRatio: 16 / 9,
               controller: _controller,
+              aspectRatio: 16 / 9,
             ),
           ),
         ),
