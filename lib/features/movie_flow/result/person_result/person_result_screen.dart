@@ -25,7 +25,7 @@ class PersonResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
     final call = ref.read(movieFlowControllerProvider.notifier);
     final watch = ref.watch(movieFlowControllerProvider);
     final theme = Theme.of(context);

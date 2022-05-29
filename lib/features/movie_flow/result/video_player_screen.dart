@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   const VideoPlayerScreen({
@@ -15,16 +16,24 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-
-  void listener() {}
+  late final YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      params: const YoutubePlayerParams(
+        // Defining custom playlist
+        showFullscreenButton: true,
+        strictRelatedVideos: true,
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _controller.close();
     super.dispose();
   }
 
@@ -39,8 +48,15 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           sigmaX: 3.0,
           sigmaY: 3.0,
         ),
-        child: const Center(
-          child: Placeholder(),
+        child: Center(
+          child: YoutubePlayerControllerProvider(
+            // Provides controller to all the widget below it.
+            controller: _controller,
+            child: YoutubePlayerIFrame(
+              aspectRatio: 16 / 9,
+              controller: _controller,
+            ),
+          ),
         ),
       ),
     );
