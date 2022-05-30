@@ -50,11 +50,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      backgroundColor: Colors.transparent,
-      body: YoutubePlayerControllerProvider(
+    return GestureDetector(
+      // extendBodyBehindAppBar: true,
+      // extendBody: true,
+      // backgroundColor: Colors.transparent,
+      onTap: () => Navigator.pop(context),
+      child: YoutubePlayerControllerProvider(
         controller: _controller,
         child: BackdropFilter(
           filter: ImageFilter.blur(
