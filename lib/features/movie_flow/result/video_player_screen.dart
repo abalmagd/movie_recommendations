@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
@@ -29,6 +30,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         strictRelatedVideos: true,
       ),
     );
+    _controller.onEnterFullscreen = () {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+      debugPrint('Entered Fullscreen');
+    };
+    _controller.onExitFullscreen = () {
+      debugPrint('Exited Fullscreen');
+    };
   }
 
   @override
@@ -43,17 +54,41 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       extendBodyBehindAppBar: true,
       extendBody: true,
       backgroundColor: Colors.transparent,
-      body: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 3.0,
-          sigmaY: 3.0,
-        ),
-        child: Center(
-          child: YoutubePlayerControllerProvider(
-            controller: _controller,
-            child: YoutubePlayerIFrame(
+      body: YoutubePlayerControllerProvider(
+        controller: _controller,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 3.0,
+            sigmaY: 3.0,
+          ),
+          child: Center(
+            child: YoutubeValueBuilder(
               controller: _controller,
-              aspectRatio: 16 / 9,
+              builder: (context, value) {
+                return AnimatedCrossFade(
+                  firstChild: const YoutubePlayerIFrame(),
+                  secondChild: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image(
+                        width: double.infinity,
+                        image: NetworkImage(
+                          YoutubePlayerController.getThumbnail(
+                            videoId: widget.videoId,
+                            quality: ThumbnailQuality.max,
+                          ),
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                      const CircularProgressIndicator(),
+                    ],
+                  ),
+                  crossFadeState: value.isReady
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  duration: const Duration(milliseconds: 300),
+                );
+              },
             ),
           ),
         ),
