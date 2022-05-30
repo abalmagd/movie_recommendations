@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   const VideoPlayerScreen({
@@ -18,68 +19,78 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late final YoutubePlayerController _controller;
 
-  void listener() {}
-
   @override
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
-      flags: const YoutubePlayerFlags(
-        hideThumbnail: true,
-        disableDragSeek: true,
-        // hideControls: true,
-        useHybridComposition: true,
+      params: const YoutubePlayerParams(
+        // Defining custom playlist
+        showFullscreenButton: true,
+        strictRelatedVideos: true,
       ),
     );
+    _controller.onEnterFullscreen = () {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+      debugPrint('Entered Fullscreen');
+    };
+    _controller.onExitFullscreen = () {
+      debugPrint('Exited Fullscreen');
+    };
   }
 
   @override
   void dispose() {
-    _controller.removeListener(listener);
-    _controller.dispose();
+    _controller.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      backgroundColor: Colors.transparent,
-      body: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 3.0,
-          sigmaY: 3.0,
-        ),
-        child: Center(
-          child: YoutubePlayer(
-            controller: _controller,
-            topActions: [
-              BackButton(
-                onPressed: () {
-                  if (_controller.value.isFullScreen) {
-                    _controller.toggleFullScreenMode();
-                  }
-                  Navigator.pop(context);
-                },
-                color: Colors.white,
-              ),
-            ],
-            bottomActions: [
-              const SizedBox(width: 14.0),
-              CurrentPosition(),
-              const SizedBox(width: 8.0),
-              ProgressBar(
-                isExpanded: true,
-                colors: ProgressBarColors(
-                  playedColor: Theme.of(context).colorScheme.primary,
-                  handleColor: Colors.white,
-                ),
-              ),
-              RemainingDuration(),
-            ],
-            showVideoProgressIndicator: true,
+    return GestureDetector(
+      // extendBodyBehindAppBar: true,
+      // extendBody: true,
+      // backgroundColor: Colors.transparent,
+      onTap: () => Navigator.pop(context),
+      child: YoutubePlayerControllerProvider(
+        controller: _controller,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 3.0,
+            sigmaY: 3.0,
+          ),
+          child: Center(
+            child: YoutubeValueBuilder(
+              controller: _controller,
+              builder: (context, value) {
+                return AnimatedCrossFade(
+                  firstChild: const YoutubePlayerIFrame(),
+                  secondChild: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image(
+                        width: double.infinity,
+                        image: NetworkImage(
+                          YoutubePlayerController.getThumbnail(
+                            videoId: widget.videoId,
+                            quality: ThumbnailQuality.max,
+                          ),
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                      const CircularProgressIndicator(),
+                    ],
+                  ),
+                  crossFadeState: value.isReady
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  duration: const Duration(milliseconds: 300),
+                );
+              },
+            ),
           ),
         ),
       ),
