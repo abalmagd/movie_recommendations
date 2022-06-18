@@ -75,7 +75,7 @@ class ResultScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(kMediumSpacing),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    'Trailers',
+                    'Videos',
                     style: theme.textTheme.headline6,
                   ),
                 ),

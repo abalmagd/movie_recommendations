@@ -15,12 +15,11 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final watch = ref.watch(movieFlowControllerProvider);
     return MaterialApp(
       title: 'Movie Finder',
       debugShowCheckedModeBanner: false,
       theme: CustomTheme.lightTheme(context),
-      themeMode: watch.themeMode,
+      themeMode: ref.watch(movieFlowControllerProvider).themeMode,
       darkTheme: CustomTheme.darkTheme(context),
       home: const MovieFlow(),
     );
