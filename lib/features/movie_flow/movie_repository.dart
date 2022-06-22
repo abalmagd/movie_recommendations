@@ -207,7 +207,7 @@ class TMDBMovieRepository implements MovieRepository {
         message: e.response?.statusMessage ?? 'Something went wrong',
         code: e.response?.statusCode,
       );
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       throw Failure(
         message: 'Connection timed out!',
       );
