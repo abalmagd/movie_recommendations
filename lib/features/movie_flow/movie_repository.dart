@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/environment_variables.dart';
+import 'package:movie_recommendations/core/failure.dart';
 import 'package:movie_recommendations/core/network/dio.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre_entity.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie_entity.dart';
@@ -11,11 +15,9 @@ import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
 
-  Future<List<MovieEntity>> getMovie(
-    double rating,
-    String date,
-    String genreIds,
-  );
+  Future<List<MovieEntity>> getMovie(double rating,
+      String date,
+      String genreIds,);
 
   Future<List<MovieEntity>> getRecommendedMovies(int movieId);
 
@@ -37,128 +39,209 @@ class TMDBMovieRepository implements MovieRepository {
 
   @override
   Future<List<GenreEntity>> getMovieGenres() async {
-    final response = await dio.get(
-      genresEndpoint,
-      queryParameters: {
-        'api_key': apiKey,
-        'language': 'en-US',
-      },
-    );
+    try {
+      final response = await dio.get(
+        genresEndpoint,
+        queryParameters: {
+          'api_key': apiKey,
+          'language': 'en-US',
+        },
+      );
 
-    final results = List<Map<String, dynamic>>.from(response.data['genres']);
+      final results = List<Map<String, dynamic>>.from(response.data['genres']);
 
-    debugPrint('Request to get genres => '
-        'Status: ${response.statusCode}, '
-        'Message: ${response.statusMessage}, '
-        'Genres: ${results.toString()}');
+      debugPrint('Request to get genres => '
+          'Status: ${response.statusCode}, '
+          'Message: ${response.statusMessage}, '
+          'Genres: ${results.toString()}');
 
-    final genres = results.map((e) => GenreEntity.fromMap(e)).toList();
+      final genres = results.map((e) => GenreEntity.fromMap(e)).toList();
 
-    return genres;
+      return genres;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw Failure(
+          message: 'No internet connection',
+          exception: e,
+        );
+      }
+      throw Failure(
+        message: e.response?.statusMessage ?? 'Something went wrong',
+        code: e.response?.statusCode,
+      );
+    }
   }
 
   @override
-  Future<List<MovieEntity>> getMovie(
-    double rating,
-    String date,
-    String genreIds,
-  ) async {
-    final response = await dio.get(
-      discoverMoviesEndpoint,
-      queryParameters: {
-        'api_key': apiKey,
-        'language': 'en-US',
-        'sort_by': 'popularity.desc',
-        'include_adult': false,
-        'release_date.gte': date,
-        'vote_count.gte': rating,
-        'with_genres': genreIds,
-      },
-    );
+  Future<List<MovieEntity>> getMovie(double rating,
+      String date,
+      String genreIds,) async {
+    try {
+      final response = await dio.get(
+        discoverMoviesEndpoint,
+        queryParameters: {
+          'api_key': apiKey,
+          'language': 'en-US',
+          'sort_by': 'popularity.desc',
+          'include_adult': false,
+          'release_date.gte': date,
+          'vote_count.gte': rating,
+          'with_genres': genreIds,
+        },
+      );
 
-    final result = List<Map<String, dynamic>>.from(response.data['results']);
+      final result = List<Map<String, dynamic>>.from(response.data['results']);
 
-    debugPrint('Request to get Movies => '
-        'Status: ${response.statusCode}, '
-        'Message: ${response.statusMessage}, '
-        'Movies: ${result.length},'
-        '# Pages: ${response.data['total_pages']},'
-        '# Results: ${response.data['total_results']},');
+      debugPrint('Request to get Movies => '
+          'Status: ${response.statusCode}, '
+          'Message: ${response.statusMessage}, '
+          'Movies: ${result.length},'
+          '# Pages: ${response.data['total_pages']},'
+          '# Results: ${response.data['total_results']},');
 
-    final movieEntities = result.map((e) => MovieEntity.fromMap(e)).toList();
+      final movieEntities = result.map((e) => MovieEntity.fromMap(e)).toList();
 
-    return movieEntities;
+      return movieEntities;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw Failure(
+          message: 'No internet connection',
+          exception: e,
+        );
+      }
+      throw Failure(
+        message: e.response?.statusMessage ?? 'Something went wrong',
+        code: e.response?.statusCode,
+      );
+    }
   }
 
   @override
   Future<List<MovieEntity>> getRecommendedMovies(int movieId) async {
-    final String recommendedMoviesEndpoint = '/movie/$movieId/recommendations';
-    final response = await dio.get(
-      recommendedMoviesEndpoint,
-      queryParameters: {
-        'api_key': apiKey,
-        'language': 'en-US',
-      },
-    );
+    try {
+      final String recommendedMoviesEndpoint =
+          '/movie/$movieId/recommendations';
+      final response = await dio.get(
+        recommendedMoviesEndpoint,
+        queryParameters: {
+          'api_key': apiKey,
+          'language': 'en-US',
+        },
+      );
 
-    final results = List<Map<String, dynamic>>.from(response.data['results']);
+      final results = List<Map<String, dynamic>>.from(response.data['results']);
 
-    final movieEntities = results.map((e) => MovieEntity.fromMap(e)).toList();
+      final movieEntities = results.map((e) => MovieEntity.fromMap(e)).toList();
 
-    return movieEntities;
+      return movieEntities;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw Failure(
+          message: 'No internet connection',
+          exception: e,
+        );
+      }
+      throw Failure(
+        message: e.response?.statusMessage ?? 'Something went wrong',
+        code: e.response?.statusCode,
+      );
+    }
   }
 
   @override
   Future<List<Actor>> getMovieCast(int movieId) async {
-    final String creditsEndpoint = '/movie/$movieId/credits';
-    final response = await dio.get(
-      creditsEndpoint,
-      queryParameters: {
-        'api_key': apiKey,
-        'language': 'en-US',
-      },
-    );
+    try {
+      final String creditsEndpoint = '/movie/$movieId/credits';
+      final response = await dio.get(
+        creditsEndpoint,
+        queryParameters: {
+          'api_key': apiKey,
+          'language': 'en-US',
+        },
+      );
 
-    final results = List<Map<String, dynamic>>.from(response.data['cast']);
-    final cast = results.map((e) => Actor.fromMap(e)).toList();
+      final results = List<Map<String, dynamic>>.from(response.data['cast']);
+      final cast = results.map((e) => Actor.fromMap(e)).toList();
 
-    return cast;
+      return cast;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw Failure(
+          message: 'No internet connection',
+          exception: e,
+        );
+      }
+      throw Failure(
+        message: e.response?.statusMessage ?? 'Something went wrong',
+        code: e.response?.statusCode,
+      );
+    }
   }
 
   @override
   Future<List<MovieEntity>> getActorMovies(int personId) async {
-    final String actorMoviesEndpoint = '/person/$personId/movie_credits';
+    try {
+      final String actorMoviesEndpoint = '/person/$personId/movie_credits';
 
-    final response = await dio.get(
-      actorMoviesEndpoint,
-      queryParameters: {
-        'api_key': apiKey,
-        'language': 'en-US',
-      },
-    );
+      final response = await dio.get(
+        actorMoviesEndpoint,
+        queryParameters: {
+          'api_key': apiKey,
+          'language': 'en-US',
+        },
+      );
 
-    final result = List<Map<String, dynamic>>.from(response.data['cast']);
+      final result = List<Map<String, dynamic>>.from(response.data['cast']);
 
-    final actorMovies = result.map((e) => MovieEntity.fromMap(e)).toList();
+      final actorMovies = result.map((e) => MovieEntity.fromMap(e)).toList();
 
-    return actorMovies;
+      return actorMovies;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw Failure(
+          message: 'No internet connection',
+          exception: e,
+        );
+      }
+      throw Failure(
+        message: e.response?.statusMessage ?? 'Something went wrong',
+        code: e.response?.statusCode,
+      );
+    } on TimeoutException catch (e) {
+      throw Failure(
+        message: 'Connection timed out!',
+      );
+    }
   }
 
   @override
   Future<List<Trailer>> getMovieTrailers(int movieId) async {
-    final String getVideosEndpoint = '/movie/$movieId/videos';
+    try {
+      final String getVideosEndpoint = '/movie/$movieId/videos';
 
-    final response = await dio.get(
-      getVideosEndpoint,
-      queryParameters: {
-        'api_key': apiKey,
-        'language': 'en-Us',
-      },
-    );
+      final response = await dio.get(
+        getVideosEndpoint,
+        queryParameters: {
+          'api_key': apiKey,
+          'language': 'en-Us',
+        },
+      );
 
-    final result = List<Map<String, dynamic>>.from(response.data['results']);
-    final videos = result.map((e) => Trailer.fromMap(e)).toList();
+      final result = List<Map<String, dynamic>>.from(response.data['results']);
+      final videos = result.map((e) => Trailer.fromMap(e)).toList();
 
-    return videos;
+      return videos;
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        throw Failure(
+          message: 'No internet connection',
+          exception: e,
+        );
+      }
+      throw Failure(
+        message: e.response?.statusMessage ?? 'Something went wrong',
+        code: e.response?.statusCode,
+      );
+    }
   }
 }

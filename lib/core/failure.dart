@@ -13,3 +13,19 @@ class Failure implements Exception {
   String toString() =>
       'Failure(message: $message, code: $code, exception: $exception)';
 }
+
+/*
+try {
+}
+on DioError catch(e) {
+if(e.error is SocketException)
+throw Failure(
+message: 'No internet connection',
+exception: e,
+)
+throw Failure(
+message: e.response?.statusMessage ?? 'Something went wrong',
+code: e.response?.statusCode,
+
+}
+ */
