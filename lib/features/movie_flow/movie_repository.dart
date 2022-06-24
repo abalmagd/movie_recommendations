@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,11 @@ import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
 abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
 
-  Future<List<MovieEntity>> getMovie(double rating,
-      String date,
-      String genreIds,);
+  Future<List<MovieEntity>> getMovie(
+    double rating,
+    String date,
+    String genreIds,
+  );
 
   Future<List<MovieEntity>> getRecommendedMovies(int movieId);
 
@@ -58,24 +59,17 @@ class TMDBMovieRepository implements MovieRepository {
       final genres = results.map((e) => GenreEntity.fromMap(e)).toList();
 
       return genres;
-    } on DioError catch (e) {
-      if (e.error is SocketException) {
-        throw Failure(
-          message: 'No internet connection',
-          exception: e,
-        );
-      }
-      throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
-        code: e.response?.statusCode,
-      );
+    } catch (e) {
+      throw Failure.handleExceptions(e);
     }
   }
 
   @override
-  Future<List<MovieEntity>> getMovie(double rating,
-      String date,
-      String genreIds,) async {
+  Future<List<MovieEntity>> getMovie(
+    double rating,
+    String date,
+    String genreIds,
+  ) async {
     try {
       final response = await dio.get(
         discoverMoviesEndpoint,
@@ -102,17 +96,8 @@ class TMDBMovieRepository implements MovieRepository {
       final movieEntities = result.map((e) => MovieEntity.fromMap(e)).toList();
 
       return movieEntities;
-    } on DioError catch (e) {
-      if (e.error is SocketException) {
-        throw Failure(
-          message: 'No internet connection',
-          exception: e,
-        );
-      }
-      throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
-        code: e.response?.statusCode,
-      );
+    } catch (e) {
+      throw Failure.handleExceptions(e);
     }
   }
 
@@ -134,17 +119,8 @@ class TMDBMovieRepository implements MovieRepository {
       final movieEntities = results.map((e) => MovieEntity.fromMap(e)).toList();
 
       return movieEntities;
-    } on DioError catch (e) {
-      if (e.error is SocketException) {
-        throw Failure(
-          message: 'No internet connection',
-          exception: e,
-        );
-      }
-      throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
-        code: e.response?.statusCode,
-      );
+    } catch (e) {
+      throw Failure.handleExceptions(e);
     }
   }
 
@@ -164,17 +140,8 @@ class TMDBMovieRepository implements MovieRepository {
       final cast = results.map((e) => Actor.fromMap(e)).toList();
 
       return cast;
-    } on DioError catch (e) {
-      if (e.error is SocketException) {
-        throw Failure(
-          message: 'No internet connection',
-          exception: e,
-        );
-      }
-      throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
-        code: e.response?.statusCode,
-      );
+    } catch (e) {
+      throw Failure.handleExceptions(e);
     }
   }
 
@@ -196,21 +163,8 @@ class TMDBMovieRepository implements MovieRepository {
       final actorMovies = result.map((e) => MovieEntity.fromMap(e)).toList();
 
       return actorMovies;
-    } on DioError catch (e) {
-      if (e.error is SocketException) {
-        throw Failure(
-          message: 'No internet connection',
-          exception: e,
-        );
-      }
-      throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
-        code: e.response?.statusCode,
-      );
-    } on TimeoutException {
-      throw Failure(
-        message: 'Connection timed out!',
-      );
+    } catch (e) {
+      throw Failure.handleExceptions(e);
     }
   }
 
@@ -231,17 +185,8 @@ class TMDBMovieRepository implements MovieRepository {
       final videos = result.map((e) => Trailer.fromMap(e)).toList();
 
       return videos;
-    } on DioError catch (e) {
-      if (e.error is SocketException) {
-        throw Failure(
-          message: 'No internet connection',
-          exception: e,
-        );
-      }
-      throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
-        code: e.response?.statusCode,
-      );
+    } catch (e) {
+      throw Failure.handleExceptions(e);
     }
   }
 }

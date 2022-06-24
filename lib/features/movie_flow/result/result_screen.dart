@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
+import 'package:movie_recommendations/core/failure.dart';
 import 'package:movie_recommendations/core/widgets/button.dart';
+import 'package:movie_recommendations/core/widgets/failure_screen.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/person_result_screen.dart';
@@ -153,7 +155,14 @@ class ResultScreen extends ConsumerWidget {
             ],
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, s) => Center(child: Text('Error => $e')),
+          error: (e, s) {
+            if (e is Failure) {
+              return FailureBody(message: e.message);
+            }
+            return const FailureBody(
+              message: 'Something went wrong, code: $nonFailureError',
+            );
+          },
         ),
         floatingActionButton: Button(
           onPressed: () {

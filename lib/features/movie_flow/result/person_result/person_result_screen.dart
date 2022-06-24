@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/core/constants.dart';
+import 'package:movie_recommendations/core/failure.dart';
+import 'package:movie_recommendations/core/widgets/failure_screen.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/cover_image.dart';
@@ -89,10 +91,22 @@ class PersonResultScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                error: (e, s) => SliverToBoxAdapter(child: Text(e.toString())),
                 loading: () => const SliverToBoxAdapter(
                   child: Center(child: CircularProgressIndicator()),
                 ),
+                error: (e, s) {
+                  if (e is Failure) {
+                    return SliverToBoxAdapter(
+                      child: FailureBody(message: e.message),
+                    );
+                  }
+                  return const SliverToBoxAdapter(
+                    child: FailureBody(
+                      message:
+                          'Something went wrong, Error code: $nonFailureError',
+                    ),
+                  );
+                },
               ),
             ),
           ],
