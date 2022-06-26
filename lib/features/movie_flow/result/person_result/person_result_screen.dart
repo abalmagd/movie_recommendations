@@ -103,7 +103,7 @@ class PersonResultScreen extends ConsumerWidget {
                   return const SliverToBoxAdapter(
                     child: FailureBody(
                       message:
-                          'Something went wrong, Error code: $nonFailureError',
+                          'Something went wrong, Error code: $unhandledExceptionCode',
                     ),
                   );
                 },

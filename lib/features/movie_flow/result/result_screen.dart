@@ -160,7 +160,7 @@ class ResultScreen extends ConsumerWidget {
               return FailureBody(message: e.message);
             }
             return const FailureBody(
-              message: 'Something went wrong, code: $nonFailureError',
+              message: 'Something went wrong, code: $unhandledExceptionCode',
             );
           },
         ),

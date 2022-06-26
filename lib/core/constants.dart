@@ -9,6 +9,7 @@ const movieNightBlue = 'assets/images/movie_night_blue500.svg';
 const movieNightRed = 'assets/images/movie_night_red500.svg';
 
 /// Major-Release.Minor-Release.Bug-fixes
-const kAppVersion = '0.2.1';
+const kAppVersion = '0.2.';
 
-const nonFailureError = '001';
+/// Code for any unhandled exceptions during runtime
+const unhandledExceptionCode = 11;
