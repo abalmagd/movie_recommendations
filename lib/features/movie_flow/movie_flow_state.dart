@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/actor.dart';
-import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
+import 'package:movie_recommendations/features/movie_flow/result/video_player/trailer.dart';
 
 @immutable
 class MovieFlowState extends Equatable {

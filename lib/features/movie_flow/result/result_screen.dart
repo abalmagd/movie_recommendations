@@ -7,8 +7,8 @@ import 'package:movie_recommendations/core/widgets/failure_screen.dart';
 import 'package:movie_recommendations/core/widgets/theme_icon_button.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/person_result_screen.dart';
-import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
-import 'package:movie_recommendations/features/movie_flow/result/video_player_screen.dart';
+import 'package:movie_recommendations/features/movie_flow/result/video_player/trailer.dart';
+import 'package:movie_recommendations/features/movie_flow/result/video_player/video_player_screen.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/cover_image.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/other_movies.dart';
 import 'package:movie_recommendations/features/movie_flow/result/widgets/poster_image_details.dart';
@@ -67,7 +67,7 @@ class ResultScreen extends ConsumerWidget {
                           horizontal: kMediumSpacing),
                       child: Text(
                         movie.overview,
-                        style: theme.textTheme.bodyText2,
+                        style: theme.textTheme.bodyMedium,
                       ),
                     ),
                   ],
@@ -78,7 +78,7 @@ class ResultScreen extends ConsumerWidget {
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     'Videos',
-                    style: theme.textTheme.headline6,
+                    style: theme.textTheme.titleLarge,
                   ),
                 ),
               ),
@@ -105,7 +105,7 @@ class ResultScreen extends ConsumerWidget {
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     'Cast',
-                    style: theme.textTheme.headline6,
+                    style: theme.textTheme.titleLarge,
                   ),
                 ),
               ),
@@ -124,7 +124,7 @@ class ResultScreen extends ConsumerWidget {
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     'Similar Movies',
-                    style: theme.textTheme.headline6,
+                    style: theme.textTheme.titleLarge,
                   ),
                 ),
               ),
@@ -295,13 +295,13 @@ class _Cast extends ConsumerWidget {
                         actor.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodyText2,
+                        style: theme.textTheme.bodyMedium,
                       ),
                       Text(
                         actor.character,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: theme.textTheme.bodyText2?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize: theme.textTheme.bodySmall?.fontSize,
                           color: theme.colorScheme.primary,
                         ),

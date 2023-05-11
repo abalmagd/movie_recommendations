@@ -9,7 +9,7 @@ import 'package:movie_recommendations/core/network/dio.dart';
 import 'package:movie_recommendations/features/movie_flow/genre/genre_entity.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie_entity.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/actor.dart';
-import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
+import 'package:movie_recommendations/features/movie_flow/result/video_player/trailer.dart';
 
 abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();

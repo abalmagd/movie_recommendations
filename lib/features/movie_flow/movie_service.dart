@@ -7,7 +7,7 @@ import 'package:movie_recommendations/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendations/features/movie_flow/movie_repository.dart';
 import 'package:movie_recommendations/features/movie_flow/result/movie.dart';
 import 'package:movie_recommendations/features/movie_flow/result/person_result/actor.dart';
-import 'package:movie_recommendations/features/movie_flow/result/trailer.dart';
+import 'package:movie_recommendations/features/movie_flow/result/video_player/trailer.dart';
 
 abstract class MovieService {
   Future<Either<Failure, List<Genre>>> getGenres();
