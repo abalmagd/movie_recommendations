@@ -21,8 +21,8 @@ to the recommended movie.
 
 ## Screens:
 <img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/73846df4-ad3d-40bc-93ac-a346ea95fbb3" width="300">
-![Apple iPhone 11 Pro Max Screenshot 1](https://github.com/abalmagd/movie_recommendations/assets/44735157/3af14f61-3cef-455e-a278-98ec03af7df2)
-![Apple iPhone 11 Pro Max Screenshot 2](https://github.com/abalmagd/movie_recommendations/assets/44735157/638f44e3-d2c0-4e90-ae28-989117c3f0fe)
-![Apple iPhone 11 Pro Max Screenshot 3](https://github.com/abalmagd/movie_recommendations/assets/44735157/786bb329-e213-4e82-96b5-4399b11333e5)
-![Apple iPhone 11 Pro Max Screenshot 4](https://github.com/abalmagd/movie_recommendations/assets/44735157/54c51910-bc0f-419f-a8b1-37da94603f20)
-![Apple iPhone 11 Pro Max Screenshot 5](https://github.com/abalmagd/movie_recommendations/assets/44735157/7b8c1413-e62f-4e8d-8bba-526c928e23c1)
+<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/3af14f61-3cef-455e-a278-98ec03af7df2" width="300">
+<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/638f44e3-d2c0-4e90-ae28-989117c3f0fe" width="300">
+<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/786bb329-e213-4e82-96b5-4399b11333e5" width="300">
+<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/54c51910-bc0f-419f-a8b1-37da94603f20" width="300">
+<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/7b8c1413-e62f-4e8d-8bba-526c928e23c1" width="300">
