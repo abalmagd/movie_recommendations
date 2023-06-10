@@ -20,7 +20,7 @@ to the recommended movie.
 - Folder by feature for folder architecture
 
 ## Screens:
-<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/73846df4-ad3d-40bc-93ac-a346ea95fbb3" width="300" height="300">
+<img src="https://github.com/abalmagd/movie_recommendations/assets/44735157/73846df4-ad3d-40bc-93ac-a346ea95fbb3" width="300">
 ![Apple iPhone 11 Pro Max Screenshot 1](https://github.com/abalmagd/movie_recommendations/assets/44735157/3af14f61-3cef-455e-a278-98ec03af7df2)
 ![Apple iPhone 11 Pro Max Screenshot 2](https://github.com/abalmagd/movie_recommendations/assets/44735157/638f44e3-d2c0-4e90-ae28-989117c3f0fe)
 ![Apple iPhone 11 Pro Max Screenshot 3](https://github.com/abalmagd/movie_recommendations/assets/44735157/786bb329-e213-4e82-96b5-4399b11333e5)
